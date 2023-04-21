@@ -28,6 +28,19 @@
 | `yFieldName`      | `y-field-name`       | Name for the data field to use to populate the chart's x-axis e.g. yFieldName of "value" will map any "value" fields in chartData to the y-axis       | `string`                                                                                                           | `undefined` |
 
 
+## Methods
+
+### `guxForceUpdate() => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+
 ## Dependencies
 
 ### Depends on

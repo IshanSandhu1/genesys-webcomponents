@@ -51,14 +51,53 @@
 >
 </gux-chart-column-beta>
 
+<h2>Programmatically set data on chart.</h2>
+
+<gux-chart-column-beta
+  id="chart-7"
+  include-legend="true"
+  x-field-name="category"
+  x-tick-label-slant="true"
+  x-axis-title="Class"
+  y-field-name="value"
+  y-axis-title="Students"
+  legend-title="Class Name"
+>
+</gux-chart-column-beta>
+
+<gux-button-slot-beta>
+  <button
+    type="button"
+    onclick="(function () {
+      const chart7 = document.querySelector('#chart-7');
+      chart7.chartData = {'values': [
+    {'category': 'a', 'value': 4},
+    {'category': 'b', 'value': 6},
+    {'category': 'c', 'value': 10},
+    {'category': 'd', 'value': 3},
+    {'category': 'e', 'value': 10},
+    {'category': 'f', 'value': 20}
+  ]
+}
+    chart7.guxForceUpdate();
+    })()"
+  >
+    Change some Data
+  </button>
+</gux-button-slot-beta>
+
 <style
   onload="(function() {
+
+
+
     const chart1 = document.querySelector('#chart-1');
     const chart2 = document.querySelector('#chart-2');
     const chart3 = document.querySelector('#chart-3');
     const chart4 = document.querySelector('#chart-4');
     const chart5 = document.querySelector('#chart-5');
     const chart6 = document.querySelector('#chart-6');
+    const chart7 = document.querySelector('#chart-7');
 
     chart1.addEventListener('chartClicked', (event) => console.log(event));
 
@@ -117,6 +156,17 @@ chart5.chartData = {'values': [
     {'category': 'Calculus', 'value': 20}
   ]
 }
+
+chart7.chartData = {'values': [
+    {'category': 'Biology', 'value': 4},
+    {'category': 'Physics', 'value': 6},
+    {'category': 'Chemistry', 'value': 10},
+    {'category': 'Statistics', 'value': 3},
+    {'category': 'Geometry', 'value': 10},
+    {'category': 'Calculus', 'value': 20}
+  ]
+}
+
   })()"
 >
   .not-used {

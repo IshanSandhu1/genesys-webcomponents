@@ -35,12 +35,38 @@
 <gux-chart-pie-beta id="chart-3" label-field="value" outer-radius="100">
 </gux-chart-pie-beta>
 
+<h2>Programmatically set data on chart.</h2>
+<gux-chart-pie-beta
+  id="chart-5"
+  label-radius="110"
+  label-field="value"
+  outer-radius="100"
+>
+</gux-chart-pie-beta>
+
+<gux-button-slot-beta>
+  <button
+    type="button"
+    onclick="(function () {
+      const chart5 = document.querySelector('#chart-5');
+      chart5.chartData = {'values': [
+        {'category': 'Voice', 'value': 4},
+        {'category': 'Callback', 'value': 6},
+        {'category': 'Chat', 'value': 10}]}
+    chart5.guxForceUpdate();
+    })()"
+  >
+    Change some Data
+  </button>
+</gux-button-slot-beta>
+
 <style
   onload="(function() {
     const chart1 = document.querySelector('#chart-1');
     const chart2 = document.querySelector('#chart-2');
     const chart3 = document.querySelector('#chart-3');
     const chart4 = document.querySelector('#chart-4');
+    const chart5 = document.querySelector('#chart-5');
 
     const chartData = {'values': [
         {'category': 'Voice', 'value': 4},
@@ -56,6 +82,7 @@
     chart2.chartData = chartData
     chart3.chartData = chartData
     chart4.chartData = chartData
+    chart5.chartData = chartData
 
   })()"
 >

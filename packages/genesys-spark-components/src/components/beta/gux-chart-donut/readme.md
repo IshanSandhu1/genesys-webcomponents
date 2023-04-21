@@ -30,6 +30,19 @@
 | `tooltipOptions`   | --                   |                                                                                                               | `EmbedOptions<string, Renderers>`                                                                                  | `undefined` |
 
 
+## Methods
+
+### `guxForceUpdate() => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+
 ## Dependencies
 
 ### Depends on

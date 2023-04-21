@@ -1,6 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
-import { Component, Element, h, JSX, Prop, Watch } from '@stencil/core';
+import {
+  Component,
+  Element,
+  h,
+  JSX,
+  Prop,
+  Watch,
+  Method,
+  forceUpdate
+} from '@stencil/core';
 import { EmbedOptions, VisualizationSpec } from 'vega-embed';
 
 import { trackComponent } from '@utils/tracking/usage';
@@ -21,6 +30,8 @@ export class GuxPieChart {
   root: HTMLElement;
 
   private visualizationSpec: VisualizationSpec;
+
+  private visualSpecElement: HTMLGuxVisualizationBetaElement;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private baseChartSpec: Record<string, any> = {
@@ -95,6 +106,12 @@ export class GuxPieChart {
   @Prop()
   embedOptions: EmbedOptions;
 
+  // eslint-disable-next-line @typescript-eslint/require-await
+  @Method()
+  async guxForceUpdate(): Promise<void> {
+    forceUpdate(this.visualSpecElement);
+  }
+
   @Watch('chartData')
   parseData() {
     if (!this.outerRadius) {
@@ -102,9 +119,8 @@ export class GuxPieChart {
     }
 
     let chartData = {};
-    if (this.chartData) {
-      chartData = { data: this.chartData };
-    }
+
+    chartData = { data: this.chartData };
 
     if (this.includeLegend) {
       this.baseChartSpec.encoding.color.legend = true;
@@ -151,12 +167,15 @@ export class GuxPieChart {
 
   componentWillLoad(): void {
     trackComponent(this.root);
-    this.parseData();
+    if (this.chartData) {
+      this.parseData();
+    }
   }
 
   render(): JSX.Element {
     return (
       <gux-visualization-beta
+        ref={el => (this.visualSpecElement = el)}
         visualizationSpec={this.visualizationSpec}
       ></gux-visualization-beta>
     ) as JSX.Element;

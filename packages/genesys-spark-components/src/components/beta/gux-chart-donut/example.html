@@ -106,6 +106,39 @@
 >
 </gux-chart-donut-beta>
 
+<h2>Programmatically set data on chart.</h2>
+
+<gux-chart-donut-beta
+  id="chart-10"
+  label-radius="110"
+  label-field="value"
+  outer-radius="80"
+  inner-radius="68"
+  gauge="true"
+>
+</gux-chart-donut-beta>
+
+<gux-button-slot-beta>
+  <button
+    type="button"
+    onclick="(function () {
+      const chart10 = document.querySelector('#chart-10');
+      chart10.chartData = {'values': [
+        {'category': 'Voice', 'value': 2},
+        {'category': 'Callback', 'value': 1},
+        {'category': 'Chat', 'value': 5},
+        {'category': 'Email', 'value': 8},
+        {'category': 'Messaging', 'value': 2},
+        {'category': 'Wuphf', 'value': 3}
+      ]
+    }
+    chart10.guxForceUpdate();
+    })()"
+  >
+    Change some Data
+  </button>
+</gux-button-slot-beta>
+
 <style
   onload="(function() {
     const chart1 = document.querySelector('#chart-1');
@@ -117,6 +150,7 @@
     const chart7 = document.querySelector('#chart-7');
     const chart8 = document.querySelector('#chart-8');
     const chart9 = document.querySelector('#chart-9');
+    const chart10 = document.querySelector('#chart-10');
 
     const chartData = {'values': [
         {'category': 'Voice', 'value': 4},
@@ -152,6 +186,7 @@
     chart7.tooltipOptions = tooltipOptions
     chart8.chartData = chartData2
     chart9.chartData = chartData
+    chart10.chartData = chartData
 
 
   })()"

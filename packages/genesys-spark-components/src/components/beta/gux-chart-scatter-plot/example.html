@@ -76,6 +76,35 @@
 >
 </gux-chart-scatter-plot-beta>
 
+<h2>Programmatically set data on chart.</h2>
+<gux-chart-scatter-plot-beta
+  id="chart-8"
+  x-field-name="date"
+  x-tick-label-slant="true"
+  y-field-name="value"
+  include-legend="true"
+  legend-position="bottom"
+>
+</gux-chart-scatter-plot-beta>
+
+<gux-button-slot-beta>
+  <button
+    type="button"
+    onclick="(function () {
+      const chart8 = document.querySelector('#chart-8');
+      chart8.chartData = {'values': [
+      {'date': '2021-01-01', 'value': 9.4, 'category': 'Jupiter'},
+      {'date': '2021-01-02', 'value': 12.8, 'category': 'Jupiter'},
+      {'date': '2021-01-03', 'value': 10.6, 'category': 'Jupiter'},
+      {'date': '2021-01-23', 'value': 6.7, 'category': 'Jupiter'},
+      {'date': '2021-01-24', 'value': 8.3, 'category': 'Jupiter'}]}
+    chart8.guxForceUpdate();
+    })()"
+  >
+    Change some Data
+  </button>
+</gux-button-slot-beta>
+
 <style
   onload="(function() {
     const chart1 = document.querySelector('#chart-1');
@@ -85,6 +114,7 @@
     const chart5 = document.querySelector('#chart-5');
     const chart6 = document.querySelector('#chart-6');
     const chart7 = document.querySelector('#chart-7');
+    const chart8 = document.querySelector('#chart-8');
 
     const chartData = {'values': [
       {'date': '2021-01-01', 'value': 9.4, 'category': 'Jupiter'},
@@ -138,6 +168,7 @@
   chart4.chartData = chartData;
   chart5.chartData = chartData;
   chart7.chartData = chartData;
+  chart8.chartData = chartData;
 
   chart6.chartData = {'values': [
       {'date': '2021-01-01', 'time': 9.4, 'statistic': 'ASA'},
@@ -157,7 +188,5 @@
 
   })()"
 >
-
-
   --noop: none;
 </style>

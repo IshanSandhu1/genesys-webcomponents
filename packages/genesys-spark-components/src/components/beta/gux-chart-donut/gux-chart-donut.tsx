@@ -1,6 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
-import { Component, Element, h, JSX, Prop, Watch } from '@stencil/core';
+import {
+  Component,
+  Element,
+  forceUpdate,
+  h,
+  JSX,
+  Prop,
+  Watch,
+  Method
+} from '@stencil/core';
 import { EmbedOptions, VisualizationSpec } from 'vega-embed';
 
 import { trackComponent } from '@utils/tracking/usage';
@@ -24,6 +33,8 @@ export class GuxDonutChart {
 
   private visualizationSpec: VisualizationSpec;
   private tooltipSpec: EmbedOptions;
+
+  private visualSpecElement: HTMLGuxVisualizationBetaElement;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private baseChartSpec: Record<string, any> = {
@@ -127,6 +138,12 @@ export class GuxDonutChart {
   @Prop()
   embedOptions: EmbedOptions;
 
+  // eslint-disable-next-line @typescript-eslint/require-await
+  @Method()
+  async guxForceUpdate(): Promise<void> {
+    forceUpdate(this.visualSpecElement);
+  }
+
   @Watch('chartData')
   parseData() {
     if (!this.outerRadius && !this.innerRadius) {
@@ -137,9 +154,8 @@ export class GuxDonutChart {
     }
 
     let chartData = {};
-    if (this.chartData) {
-      chartData = { data: this.chartData };
-    }
+
+    chartData = { data: this.chartData };
 
     if (this.legendPosition) {
       this.baseChartSpec.config.legend.orient = this.legendPosition;
@@ -294,12 +310,15 @@ export class GuxDonutChart {
 
   componentWillLoad(): void {
     trackComponent(this.root);
-    this.parseData();
+    if (this.chartData) {
+      this.parseData();
+    }
   }
 
   render(): JSX.Element {
     return (
       <gux-visualization-beta
+        ref={el => (this.visualSpecElement = el)}
         visualizationSpec={this.visualizationSpec}
         embedOptions={this.tooltipSpec}
       ></gux-visualization-beta>

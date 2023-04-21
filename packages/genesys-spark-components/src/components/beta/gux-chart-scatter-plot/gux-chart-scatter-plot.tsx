@@ -1,6 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
-import { Component, Element, h, JSX, Prop, Watch } from '@stencil/core';
+import {
+  Component,
+  Element,
+  h,
+  JSX,
+  Prop,
+  Watch,
+  Method,
+  forceUpdate
+} from '@stencil/core';
 import { EmbedOptions, VisualizationSpec } from 'vega-embed';
 
 import { trackComponent } from '@utils/tracking/usage';
@@ -20,6 +29,8 @@ export class GuxScatterPlotChart {
   root: HTMLElement;
 
   private visualizationSpec: VisualizationSpec;
+
+  private visualSpecElement: HTMLGuxVisualizationBetaElement;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private baseChartSpec: Record<string, any> = {
@@ -144,6 +155,12 @@ export class GuxScatterPlotChart {
   @Prop()
   embedOptions: EmbedOptions;
 
+  // eslint-disable-next-line @typescript-eslint/require-await
+  @Method()
+  async guxForceUpdate(): Promise<void> {
+    forceUpdate(this.visualSpecElement);
+  }
+
   @Watch('chartData')
   parseData() {
     if (!this.xFieldName || !this.yFieldName) {
@@ -154,9 +171,8 @@ export class GuxScatterPlotChart {
     }
 
     let chartData = {};
-    if (this.chartData) {
-      chartData = { data: this.chartData };
-    }
+
+    chartData = { data: this.chartData };
 
     if (this.xTickLabelSlant) {
       this.baseChartSpec.config.axisX.labelAngle = -45;
@@ -219,12 +235,15 @@ export class GuxScatterPlotChart {
 
   componentWillLoad(): void {
     trackComponent(this.root);
-    this.parseData();
+    if (this.chartData) {
+      this.parseData();
+    }
   }
 
   render(): JSX.Element {
     return (
       <gux-visualization-beta
+        ref={el => (this.visualSpecElement = el)}
         visualizationSpec={this.visualizationSpec}
       ></gux-visualization-beta>
     ) as JSX.Element;
