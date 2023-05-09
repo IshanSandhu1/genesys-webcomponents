@@ -90,6 +90,12 @@ export class GuxCalendar {
   selectingDate: Date | null = null;
 
   /**
+   * If value is empty then we do not want to show a default date in the calendar on initial load
+   */
+  @State()
+  isValueDefined: boolean = true;
+
+  /**
    * Triggered when user selects a date
    */
   @Event()
@@ -193,6 +199,8 @@ export class GuxCalendar {
         0,
         0
       );
+      const now = new Date();
+      now.setHours(0, 0, 0, 0);
       const classes = [];
 
       let disabled = false;
@@ -212,7 +220,10 @@ export class GuxCalendar {
       }
 
       let isSelected = false;
-      if (this.mode === CalendarModes.Range) {
+      if (date.getTime() === now.getTime()) {
+        classes.push('today');
+      }
+      if (this.mode === CalendarModes.Range && this.showDefaultDate) {
         const [start, end] = fromIsoDateRange(this.value);
         const fromTimeStamp = start.getTime();
         const toTimeStamp = end.getTime();
@@ -227,7 +238,7 @@ export class GuxCalendar {
         }
       } else {
         const selectedTimestamp = fromIsoDate(this.value).getTime();
-        if (date.getTime() === selectedTimestamp) {
+        if (date.getTime() === selectedTimestamp && this.showDefaultDate) {
           isSelected = true;
           classes.push('gux-selected');
         }
@@ -324,6 +335,8 @@ export class GuxCalendar {
 
   async onDateClick(date: Date): Promise<void> {
     if (!this.outOfBounds(date)) {
+      this.isValueDefined = true;
+
       if (this.mode !== CalendarModes.Range) {
         await this.setValueAndEmit(date);
       } else {
@@ -357,12 +370,24 @@ export class GuxCalendar {
     }
   }
 
+  onTableMouseLeave() {
+    if (this.mode === CalendarModes.Range && this.selectingDate !== null) {
+      // De-select the 2nd date when the mouse leaves the calendar area
+      this.selectingDate = fromIsoDateRange(this.value)[0];
+      this.value = asIsoDateRange(this.selectingDate, this.selectingDate);
+    }
+  }
+
   updateRangeElements() {
     if (this.mode === CalendarModes.Range) {
-      removeClassToElements(this.getAllDatesElements(), 'gux-hovered');
-      const [start, end] = fromIsoDateRange(this.value);
-      const rangeElements = this.getRangeDatesElements(start, end);
-      addClassToElements(rangeElements, 'gux-hovered');
+      if (this.selectingDate !== null || this.value !== null) {
+        removeClassToElements(this.getAllDatesElements(), 'gux-hovered');
+        const [start, end] = fromIsoDateRange(this.value);
+        const rangeElements = this.getRangeDatesElements(start, end);
+        if (this.isValueDefined) {
+          addClassToElements(rangeElements, 'gux-hovered');
+        }
+      }
     }
   }
 
@@ -431,6 +456,7 @@ export class GuxCalendar {
     this.startDayOfWeek = this.startDayOfWeek || getStartOfWeek(this.locale);
 
     if (!this.value) {
+      this.isValueDefined = false;
       const now = new Date();
       now.setHours(0, 0, 0, 0);
       if (this.mode === CalendarModes.Range) {
@@ -438,7 +464,10 @@ export class GuxCalendar {
       } else {
         this.value = asIsoDate(now);
       }
+    } else {
+      this.isValueDefined = true;
     }
+
     this.previewValue = fromIsoDate(this.value);
   }
 
@@ -463,7 +492,7 @@ export class GuxCalendar {
 
   renderCalendarTable(index: number) {
     return (
-      <table>
+      <table onMouseLeave={() => this.onTableMouseLeave()}>
         <tr>
           {getWeekdays(this.locale, this.startDayOfWeek).map(
             day => (<th>{day}</th>) as JSX.Element
