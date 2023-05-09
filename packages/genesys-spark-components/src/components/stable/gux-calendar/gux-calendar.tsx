@@ -223,7 +223,7 @@ export class GuxCalendar {
       if (date.getTime() === now.getTime()) {
         classes.push('today');
       }
-      if (this.mode === CalendarModes.Range && this.showDefaultDate) {
+      if (this.mode === CalendarModes.Range && this.isValueDefined) {
         const [start, end] = fromIsoDateRange(this.value);
         const fromTimeStamp = start.getTime();
         const toTimeStamp = end.getTime();
@@ -238,7 +238,7 @@ export class GuxCalendar {
         }
       } else {
         const selectedTimestamp = fromIsoDate(this.value).getTime();
-        if (date.getTime() === selectedTimestamp && this.showDefaultDate) {
+        if (date.getTime() === selectedTimestamp && this.isValueDefined) {
           isSelected = true;
           classes.push('gux-selected');
         }
