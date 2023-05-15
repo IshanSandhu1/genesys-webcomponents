@@ -734,7 +734,9 @@ export class GuxDatepicker {
         ref={(el: HTMLGuxCalendarElement) => (this.calendarElement = el)}
         value={this.value}
         mode={this.mode}
-        onInput={(event: CustomEvent) => this.onCalendarSelect(event)}
+        onGuxcalendarselect={(event: CustomEvent) =>
+          this.onCalendarSelect(event)
+        }
         minDate={this.minDate}
         maxDate={this.maxDate}
         numberOfMonths={this.numberOfMonths}

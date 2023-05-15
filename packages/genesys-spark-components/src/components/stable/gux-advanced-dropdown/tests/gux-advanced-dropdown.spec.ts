@@ -5,7 +5,7 @@ import MutationObserver from 'mutation-observer';
 describe('gux-advanced-dropdown', () => {
   beforeEach(async () => {
     (
-      global as NodeJS.Global & {
+      global as typeof globalThis & {
         MutationObserver: any;
       }
     ).MutationObserver = MutationObserver;

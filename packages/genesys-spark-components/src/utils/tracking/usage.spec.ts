@@ -3,6 +3,15 @@ import packageInfo from '../../../package.json';
 
 const component = document.createElement('gux-button');
 const addPageAction = jest.fn();
+const addRelease = jest.fn();
+const addToTrace = jest.fn();
+const finished = jest.fn();
+const noticeError = jest.fn();
+const setCustomAttribute = jest.fn();
+const setErrorHandler = jest.fn();
+const setPageViewName = jest.fn();
+const interaction = jest.fn();
+const setCurrentRouteName = jest.fn();
 
 describe('tracking/usage', () => {
   beforeAll(() => {
@@ -12,8 +21,17 @@ describe('tracking/usage', () => {
   beforeEach(() => {
     addPageAction.mockClear();
     window.newrelic = {
-      addPageAction
-    };
+      addPageAction,
+      addRelease,
+      addToTrace,
+      finished,
+      noticeError,
+      setCustomAttribute,
+      setErrorHandler,
+      setPageViewName,
+      interaction,
+      setCurrentRouteName
+    } 
     window.document.contains = jest.fn().mockReturnValue(true);
   });
 

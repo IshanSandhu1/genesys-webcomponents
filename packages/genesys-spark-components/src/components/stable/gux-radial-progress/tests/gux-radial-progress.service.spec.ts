@@ -2,6 +2,7 @@ import {
   canShowPercentageState,
   getPercentageString
 } from '../gux-radial-progress.service';
+import { GuxRadialProgressScale } from '../gux-radial-progress.types';
 
 describe('gux-radial-progress.service', () => {
   describe('#canShowPercentageState', () => {
@@ -47,7 +48,11 @@ describe('gux-radial-progress.service', () => {
       { value: 1.5555, max: 10, scale: 2, expectResult: '15.56%' }
     ].forEach(({ value, max, scale, expectResult }, index) => {
       it(`should render component as expected (${index + 1})`, async () => {
-        const result = getPercentageString(value, max, scale);
+        const result = getPercentageString(
+          value,
+          max,
+          scale as GuxRadialProgressScale
+        );
 
         expect(result).toBe(expectResult);
       });

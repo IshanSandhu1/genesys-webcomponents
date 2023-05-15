@@ -9,7 +9,7 @@ const language = 'en';
 describe('gux-form-field-search', () => {
   beforeEach(async () => {
     (
-      global as NodeJS.Global & {
+      global as typeof globalThis & {
         MutationObserver: any;
       }
     ).MutationObserver = MutationObserver;

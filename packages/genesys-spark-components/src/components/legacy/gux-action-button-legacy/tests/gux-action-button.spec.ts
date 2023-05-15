@@ -34,7 +34,7 @@ describe('gux-action-button-legacy', () => {
     page.win.addEventListener('actionClick', actionClickSpy);
 
     const element = document.querySelector('gux-action-button-legacy');
-    const actionButton = element.shadowRoot.querySelector(
+    const actionButton: HTMLButtonElement = element.shadowRoot.querySelector(
       '.gux-action-button > button'
     );
 
@@ -59,7 +59,7 @@ describe('gux-action-button-legacy', () => {
     page.win.addEventListener('actionClick', actionClickSpy);
 
     const element = document.querySelector('gux-action-button-legacy');
-    const actionButton = element.shadowRoot.querySelector(
+    const actionButton: HTMLButtonElement = element.shadowRoot.querySelector(
       '.gux-action-button > button'
     );
 
@@ -77,7 +77,7 @@ describe('gux-action-button-legacy', () => {
     page.win.addEventListener('close', closeSpy);
 
     const element = document.querySelector('gux-action-button-legacy');
-    const dropdownButton = element.shadowRoot.querySelector(
+    const dropdownButton: HTMLButtonElement = element.shadowRoot.querySelector(
       '.gux-dropdown-button > button'
     );
 
@@ -104,7 +104,7 @@ describe('gux-action-button-legacy', () => {
     page.win.addEventListener('open', openSpy);
 
     const element = document.querySelector('gux-action-button-legacy');
-    const dropdownButton = element.shadowRoot.querySelector(
+    const dropdownButton: HTMLButtonElement = element.shadowRoot.querySelector(
       '.gux-dropdown-button > button'
     );
 

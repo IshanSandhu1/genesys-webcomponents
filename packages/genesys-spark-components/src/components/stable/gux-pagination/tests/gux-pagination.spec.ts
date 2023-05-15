@@ -26,7 +26,7 @@ const language = 'en';
 describe('gux-pagination', () => {
   beforeEach(() => {
     (
-      global as NodeJS.Global & {
+      global as typeof globalThis & {
         MutationObserver: any;
       }
     ).MutationObserver = MutationObserver;

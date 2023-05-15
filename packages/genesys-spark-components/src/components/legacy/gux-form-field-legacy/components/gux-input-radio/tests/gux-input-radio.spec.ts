@@ -1,4 +1,4 @@
-import { newSpecPage } from '@stencil/core/testing';
+import { newSpecPage, SpecPage } from '@stencil/core/testing';
 import { GuxInputRadio } from '../gux-input-radio';
 
 describe('gux-input-radio', () => {

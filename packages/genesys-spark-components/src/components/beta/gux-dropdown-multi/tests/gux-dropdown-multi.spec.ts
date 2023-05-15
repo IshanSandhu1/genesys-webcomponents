@@ -20,7 +20,7 @@ const language = 'en';
 describe('gux-dropdown', () => {
   beforeEach(() => {
     (
-      global as NodeJS.Global & {
+      global as typeof globalThis & {
         MutationObserver: any;
       }
     ).MutationObserver = MutationObserver;

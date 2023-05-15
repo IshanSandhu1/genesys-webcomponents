@@ -45,7 +45,7 @@ export class GuxCopyToClipboard {
     this.tooltipContent = 'clickToCopy';
   }
 
-  private onCopyToClipboard() {
+  onCopyToClipboard() {
     const copyText = this.root.innerText;
 
     navigator.clipboard

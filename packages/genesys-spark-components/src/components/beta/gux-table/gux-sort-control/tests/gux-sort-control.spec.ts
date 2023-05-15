@@ -50,7 +50,7 @@ describe('gux-sort-control', () => {
           );
           const sortButton = sortControl.shadowRoot.querySelector(
             'button.gux-sort-button'
-          );
+          ) as HTMLButtonElement;
           sortButton.click();
 
           expect(guxsortchangedSpy).toHaveBeenCalledWith(

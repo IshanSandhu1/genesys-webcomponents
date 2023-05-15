@@ -11,6 +11,8 @@ export const config: Config = {
   hydratedFlag: {
     selector: 'attribute'
   },
+  sourceMap: false,
+  enableCache: false,
   outputTargets: [
     {
       type: 'dist',

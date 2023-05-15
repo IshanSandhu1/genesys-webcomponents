@@ -1,3 +1,8 @@
+jest.mock('../../../../utils/decorator/on-click-outside', () => ({
+  __esModule: true,
+  OnClickOutside: jest.fn()
+}));
+
 import { newSpecPage } from '@stencil/core/testing';
 
 import { GuxDatepicker } from '../gux-datepicker';

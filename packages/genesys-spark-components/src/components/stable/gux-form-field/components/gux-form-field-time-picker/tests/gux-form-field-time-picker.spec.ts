@@ -10,7 +10,7 @@ const language = 'en';
 describe('gux-form-field-time-picker', () => {
   beforeEach(async () => {
     (
-      global as NodeJS.Global & {
+      global as typeof globalThis & {
         MutationObserver: any;
       }
     ).MutationObserver = MutationObserver;

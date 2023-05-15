@@ -69,20 +69,20 @@ describe('gux-switch', () => {
       const guxSwitchItemMinute: HTMLGuxSwitchItemElement =
         page.root.querySelector('gux-switch-item[value=minute]');
       const changeEventSpy = jest.fn();
-      const inputEventSpy = jest.fn();
+      const eventSpy = jest.fn();
 
       element.addEventListener('change', () => {
         changeEventSpy();
       });
       element.addEventListener('input', () => {
-        inputEventSpy();
+        eventSpy();
       });
 
       guxSwitchItemMinute.click();
       await page.waitForChanges();
 
       expect(changeEventSpy).toHaveBeenCalledWith();
-      expect(inputEventSpy).toHaveBeenCalledWith();
+      expect(eventSpy).toHaveBeenCalledWith();
     });
 
     it(`should not emit a 'change' and 'input' event when the selected item is reselected`, async () => {
@@ -91,20 +91,20 @@ describe('gux-switch', () => {
       const guxSwitchItemDay: HTMLGuxSwitchItemElement =
         page.root.querySelector('gux-switch-item[value=day]');
       const changeEventSpy = jest.fn();
-      const inputEventSpy = jest.fn();
+      const eventSpy = jest.fn();
 
       element.addEventListener('change', () => {
         changeEventSpy();
       });
       element.addEventListener('input', () => {
-        inputEventSpy();
+        eventSpy();
       });
 
       guxSwitchItemDay.click();
       await page.waitForChanges();
 
       expect(changeEventSpy).not.toHaveBeenCalled();
-      expect(inputEventSpy).not.toHaveBeenCalled();
+      expect(eventSpy).not.toHaveBeenCalled();
     });
 
     it(`should not emit a 'change' or 'input' event when a disabled item is selected`, async () => {
@@ -113,20 +113,20 @@ describe('gux-switch', () => {
       const guxSwitchItemHour: HTMLGuxSwitchItemElement =
         page.root.querySelector('gux-switch-item[value=hour]');
       const changeEventSpy = jest.fn();
-      const inputEventSpy = jest.fn();
+      const eventSpy = jest.fn();
 
       element.addEventListener('change', () => {
         changeEventSpy();
       });
       element.addEventListener('input', () => {
-        inputEventSpy();
+        eventSpy();
       });
 
       guxSwitchItemHour.click();
       await page.waitForChanges();
 
       expect(changeEventSpy).not.toHaveBeenCalled();
-      expect(inputEventSpy).not.toHaveBeenCalled();
+      expect(eventSpy).not.toHaveBeenCalled();
     });
   });
 

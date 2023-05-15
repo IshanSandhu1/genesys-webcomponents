@@ -23,10 +23,8 @@ describe('gux-visualization-beta', () => {
     ].forEach(({ description, html }) => {
       it(description, async () => {
         const page = await newE2EPage({ html });
-        const element = (await page.find(
-          'gux-visualization-beta'
-        )) as HTMLGuxVisualizationElement;
-        element.visualizationSpec = visualizationSpecLine;
+        const element = await page.find('gux-visualization-beta');
+        element.setProperty('visualizationSpec', visualizationSpecLine);
 
         await page.waitForChanges();
 

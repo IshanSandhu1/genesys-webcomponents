@@ -115,7 +115,7 @@ describe('gux-rating', () => {
             '.gux-rating-star-container'
           );
           const starElements = starContainer.children;
-          const ratingElement = starElements[
+          const ratingElement: HTMLElement = starElements[
             ratingElementIndex
           ].shadowRoot.querySelector('.gux-icon-container');
 

@@ -36,7 +36,7 @@ describe('gux-action-button', () => {
     page.win.addEventListener('actionClick', actionClickSpy);
 
     const element = document.querySelector('gux-action-button');
-    const actionButton = element.shadowRoot.querySelector(
+    const actionButton: HTMLButtonElement = element.shadowRoot.querySelector(
       '.gux-action-button > button'
     );
 
@@ -61,7 +61,7 @@ describe('gux-action-button', () => {
     page.win.addEventListener('actionClick', actionClickSpy);
 
     const element = document.querySelector('gux-action-button');
-    const actionButton = element.shadowRoot.querySelector(
+    const actionButton: HTMLButtonElement = element.shadowRoot.querySelector(
       '.gux-action-button > button'
     );
 
@@ -120,7 +120,7 @@ describe('gux-action-button', () => {
     page.win.addEventListener('open', openSpy);
 
     const element = document.querySelector('gux-action-button');
-    const dropdownButton = element.shadowRoot.querySelector(
+    const dropdownButton: HTMLButtonElement = element.shadowRoot.querySelector(
       '.gux-dropdown-button > button'
     );
 
