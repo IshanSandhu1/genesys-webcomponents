@@ -1,0 +1,174 @@
+@import (reference) '../../../style/color.less';
+@import (reference) '../../../style/typography.less';
+@import (reference) '../../../style/color-palette.less';
+
+// Style
+:host {
+  display: inline-block;
+}
+
+.gux-date-picker {
+  margin-top: 2px;
+  border: 1px solid @gux-grey-30;
+  border-radius: 4px;
+
+  .gux-header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 16px;
+    padding: 16px;
+    color: @gux-grey-100;
+    background-color: @gux-blue-60;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+
+    button {
+      position: absolute;
+      padding: 5px;
+      color: @gux-grey-100;
+      cursor: pointer;
+      background: none;
+      border: none;
+      outline: none;
+
+      &:focus-visible {
+        outline: @gux-blue-80 auto 5px;
+      }
+
+      &.gux-left {
+        left: 18px;
+      }
+
+      &.gux-right {
+        right: 18px;
+      }
+
+      gux-icon {
+        width: 16px;
+        height: 16px;
+        pointer-events: none;
+      }
+    }
+
+    .gux-month-list {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+
+      label {
+        width: 100%;
+        text-align: center;
+        .body-font();
+        .bold-font();
+      }
+    }
+  }
+
+  .gux-content {
+    display: flex;
+    align-items: flex-start;
+    padding: 20px 24px;
+    color: @gux-black-50;
+    background-color: @gux-grey-100;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+
+    .gux-date-picker-content {
+      width: 168px;
+      text-align: left;
+      table-layout: fixed;
+      border-spacing: 0;
+      -ms-user-select: none;
+      user-select: none;
+
+      &:not(:last-child) {
+        padding-right: 24px;
+      }
+
+      .gux-day-container,
+      .gux-date-picker-header {
+        display: flex;
+        height: 28px;
+
+        &:empty {
+          display: none;
+        }
+
+        .gux-header-day,
+        .gux-day-value {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 28px;
+          height: 28px;
+          padding: 0;
+          margin: 0;
+          text-align: center;
+          .body-font();
+        }
+
+        .gux-header-day {
+          .bold-font();
+        }
+
+        .gux-day-value {
+          &.gux-today {
+            .bold-font();
+          }
+
+          &.gux-hovered {
+            background-color: @gux-blue-100;
+          }
+
+          &.gux-selected {
+            color: @gux-grey-100;
+            background-color: @gux-blue-60;
+            border-radius: 4px;
+
+            &.gux-start-date {
+              border-radius: 4px 0 0 4px;
+            }
+
+            &.gux-end-date {
+              border-radius: 0 4px 4px 0;
+            }
+          }
+
+          &:hover:not(&.gux-start-date):not(&.gux-end-date) {
+            color: @gux-grey-100;
+            background-color: @gux-blue-60;
+            border-radius: 4px;
+          }
+
+          &:hover {
+            cursor: pointer;
+          }
+
+          &.gux-disabled {
+            color: fade(@gux-black-50, 50%);
+            pointer-events: none;
+          }
+
+          &.gux-not-in-month {
+            color: fade(@gux-black-100, 50%);
+
+            &:hover {
+              color: @gux-black-50;
+              background-color: @gux-border;
+            }
+
+            &.gux-hidden {
+              visibility: hidden;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.gux-sr-only {
+  .gux-sr-only();
+}
