@@ -1,0 +1,107 @@
+/**
+  * @prop --gse-ui-in-line-alert-label-font-family
+  * @prop --gse-ui-in-line-alert-label-font-weight
+  * @prop --gse-ui-in-line-alert-label-line-height
+  * @prop --gse-ui-in-line-alert-label-font-size
+  * @prop --gse-ui-in-line-alert-body-font-family
+  * @prop --gse-ui-in-line-alert-body-font-weight
+  * @prop --gse-ui-in-line-alert-body-line-height
+  * @prop --gse-ui-in-line-alert-body-font-size
+  * @prop --gse-ui-inline-alert-info-background-default
+  * @prop --gse-ui-inline-alert-info-border-default
+  * @prop --gse-ui-inline-alert-info-foreground-default
+  * @prop --gse-ui-inline-alert-info-foreground-icon
+  * @prop --gse-ui-inline-alert-success-background-default
+  * @prop --gse-ui-inline-alert-success-border-default
+  * @prop --gse-ui-inline-alert-success-foreground-default
+  * @prop --gse-ui-inline-alert-success-foreground-icon
+  * @prop --gse-ui-inline-alert-warning-background-default
+  * @prop --gse-ui-inline-alert-warning-border-default
+  * @prop --gse-ui-inline-alert-warning-foreground-default
+  * @prop --gse-ui-inline-alert-warning-foreground-icon
+  * @prop --gse-ui-inline-alert-error-background-default
+  * @prop --gse-ui-inline-alert-error-border-default
+  * @prop --gse-ui-inline-alert-error-foreground-default
+  * @prop --gse-ui-inline-alert-error-foreground-icon
+  */
+
+@import '../../../style/mixins';
+
+:host {
+  display: block;
+}
+
+.gux-inline-alert {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 7px 16px;
+  border: 1px solid;
+  border-radius: 4px;
+
+  gux-icon {
+    flex-shrink: 0;
+    align-self: flex-start;
+    width: 16px;
+    height: 16px;
+    margin-top: 1px;
+  }
+
+  gux-tooltip-title {
+    white-space: nowrap;
+  }
+
+  .gux-message-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--gse-ui-in-line-alert-body-font-family);
+    font-size: var(--gse-ui-in-line-alert-body-font-size);
+    font-weight: var(--gse-ui-in-line-alert-body-font-weight);
+    line-height: var(--gse-ui-in-line-alert-body-line-height);
+  }
+
+  .gux-sr-only {
+    @include gux-sr-only-clip;
+  }
+
+  &.gux-info {
+    color: var(--gse-ui-inline-alert-info-foreground-default);
+    background-color: var(--gse-ui-inline-alert-info-background-default);
+    border-color: var(--gse-ui-inline-alert-info-border-default);
+    gux-icon {
+      color: var(--gse-ui-inline-alert-info-foreground-icon);
+    }
+  }
+
+  &.gux-error {
+    color: var(--gse-ui-inline-alert-error-foreground-default);
+    background-color: var(--gse-ui-inline-alert-error-background-default);
+    border-color: var(--gse-ui-inline-alert-error-border-default);
+    gux-icon {
+      color: var(--gse-ui-inline-alert-error-foreground-icon);
+    }
+  }
+
+  &.gux-warning {
+    color: var(--gse-ui-inline-alert-warning-foreground-default);
+    background-color: var(--gse-ui-inline-alert-warning-background-default);
+    border-color: var(--gse-ui-inline-alert-warning-border-default);
+    gux-icon {
+      color: var(--gse-ui-inline-alert-warning-foreground-icon);
+    }
+  }
+
+  &.gux-success {
+    color: var(--gse-ui-inline-alert-success-foreground-default);
+    background-color: var(--gse-ui-inline-alert-success-background-default);
+    border-color: var(--gse-ui-inline-alert-success-border-default);
+    gux-icon {
+      color: var(--gse-ui-inline-alert-success-foreground-icon);
+    }
+  }
+}

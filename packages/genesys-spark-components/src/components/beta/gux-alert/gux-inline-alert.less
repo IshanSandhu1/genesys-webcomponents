@@ -17,7 +17,6 @@
   justify-content: flex-start;
   padding: @gux-spacing-2xs @gux-spacing-xs;
   border-radius: @gux-spacing-2xs;
-  .body-font();
 
   gux-icon {
     flex-shrink: 0;
@@ -29,6 +28,14 @@
 
   gux-tooltip-title {
     white-space: nowrap;
+  }
+
+  .gux-message-wrapper {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-start;
+    .body-font();
   }
 
   .gux-sr-only {
