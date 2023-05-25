@@ -15,24 +15,28 @@ import {
   flip,
   offset,
   shift,
-  Placement
+  Placement,
+  arrow
 } from '@floating-ui/dom';
 
 import { randomHTMLId } from '@utils/dom/random-html-id';
 import { trackComponent } from '@utils/tracking/usage';
 import { findElementById } from '@utils/dom/find-element-by-id';
 import { afterNextRender } from '@utils/dom/after-next-render';
+import { GuxTooltipContrast } from './gux-tooltip-types';
 
 /**
  * @slot - Content of the tooltip
  */
 @Component({
-  styleUrl: 'gux-tooltip.less',
+  styleUrl: 'gux-tooltip.scss',
   tag: 'gux-tooltip',
   shadow: true
 })
 export class GuxTooltip {
   private forElement: HTMLElement;
+  private arrowElement: HTMLDivElement;
+
   private pointerenterHandler: () => void = () => this.show();
   private pointerleaveHandler: () => void = () => this.hide();
   private focusinHandler: () => void = () => this.show();
@@ -60,6 +64,9 @@ export class GuxTooltip {
    */
   @State()
   isShown: boolean = false;
+
+  @Prop()
+  contrast: GuxTooltipContrast = 'light';
 
   @Listen('keydown', { target: 'window', passive: true })
   handleKeyDown(event: KeyboardEvent) {
@@ -101,17 +108,46 @@ export class GuxTooltip {
   }
 
   private updatePosition(): void {
+    //This is 13 because this makes the arrow look aligned.
+    const arrowLen = 13;
+
     void computePosition(this.forElement, this.root, {
       placement: this.placement,
       strategy: 'fixed',
-      middleware: [offset(16), flip(), shift()]
-    }).then(({ x, y, placement }) => {
+      middleware: [
+        offset(16),
+        flip(),
+        shift(),
+        arrow({ element: this.arrowElement })
+      ]
+    }).then(({ x, y, middlewareData, placement }) => {
       Object.assign(this.root.style, {
         left: `${x}px`,
         top: `${y}px`
       });
-      // data-placement is currently only used for e2e tests
-      this.root.setAttribute('data-placement', placement);
+
+      const side = placement.split('-')[0];
+
+      const staticSide = {
+        top: 'bottom',
+        right: 'left',
+        bottom: 'top',
+        left: 'right'
+      }[side];
+
+      if (middlewareData.arrow) {
+        const { x, y } = middlewareData.arrow;
+        //data-placement is currently only used for e2e tests.
+        this.root.setAttribute('data-placement', placement);
+        Object.assign(this.arrowElement.style, {
+          left: x != null ? `${x}px` : '',
+          top: y != null ? `${y}px` : '',
+          right: '',
+          bottom: '',
+          [staticSide]: `${-arrowLen / 2}px`,
+          transform: 'rotate(45deg)'
+        });
+      }
     });
   }
   private show(): void {
@@ -166,7 +202,7 @@ export class GuxTooltip {
   }
 
   componentWillLoad(): void {
-    trackComponent(this.root);
+    trackComponent(this.root, { variant: this.placement });
   }
 
   disconnectedCallback(): void {
@@ -189,7 +225,16 @@ export class GuxTooltip {
   render(): JSX.Element {
     return (
       <Host id={this.id} class={{ 'gux-show': this.isShown }} role="tooltip">
-        <div class="gux-container">
+        <div
+          ref={(el: HTMLDivElement) => (this.arrowElement = el)}
+          class="gux-arrow"
+        ></div>
+        <div
+          class={{
+            'gux-container': true,
+            [`gux-${this.contrast}`]: true
+          }}
+        >
           <slot />
         </div>
       </Host>

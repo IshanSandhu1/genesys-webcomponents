@@ -1,0 +1,122 @@
+@import '~genesys-spark-tokens/dist/scss/global.scss';
+@import '~genesys-spark-tokens/dist/scss/ui.scss';
+@import '../../../style/zindex.scss';
+
+@import '../../../style/mixins';
+
+@mixin gse-tooltip-message-text {
+  $gse-body-sm-regular-font-family: Noto Sans;
+  $gse-body-sm-regular-font-weight: 400;
+  $gse-body-sm-regular-line-height: 18px;
+  $gse-body-sm-regular-font-size: 12px;
+  $gse-body-sm-regular-letter-spacing: 0%;
+  $gse-body-sm-regular-paragraph-spacing: 0;
+  $gse-body-sm-regular-paragraph-indent: 0px;
+  $gse-body-sm-regular-text-case: none;
+  $gse-body-sm-regular-text-decoration: none;
+}
+
+:host {
+  position: fixed;
+  z-index: var(--gux-zindex-tooltip, $gux-zindex-tooltip);
+  display: none;
+  width: max-content;
+  max-width: 250px;
+  overflow: visible;
+  opacity: 0;
+  //drop shadow to be added to the host. (elevation/medium 20)
+}
+
+:host(.gux-show) {
+  display: block;
+  animation-name: fade-in;
+  animation-duration: 250ms;
+  animation-delay: 1s;
+  animation-fill-mode: forwards;
+}
+
+.gux-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-content: center;
+  gap: 8px;
+  box-sizing: border-box;
+  padding: 8px 12px;
+  pointer-events: none;
+  border: 1px solid var(--gse-ui-tooltip-border-default);
+  border-radius: 4px;
+  @include gse-tooltip-message-text;
+
+  ::slotted(gux-icon) {
+    width: var(--gse-xs);
+    height: var(--gse-xs);
+    align-self: center;
+  }
+
+  &.gux-light {
+    background-color: var(--gse-ui-tooltip-background-default);
+    border-color: var(--gse-ui-tooltip-border-default);
+    color: var(--gse-ui-tooltip-foreground-default);
+  }
+
+  &.gux-dark {
+    background-color: var(--gse-ui-tooltip-background-dark);
+    border-color: var(--gse-ui-tooltip-background-dark);
+    color: var(--gse-ui-tooltip-foreground-inverse);
+  }
+
+  .gux-arrow {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: red;
+    z-index: 1;
+
+    &[data-placement='bottom'],
+    &[data-placement='bottom-start'],
+    &[data-placement='bottom-end'] {
+      .gux-arrow {
+        border-top: 1px solid var(--gse-ui-tooltip-border-default);
+        border-left: 1px solid var(--gse-ui-tooltip-border-default);
+      }
+    }
+
+    &[data-placement='top'],
+    &[data-placement='top-start'],
+    &[data-placement='top-end'] {
+      .gux-arrow {
+        border-right: 1px solid var(--gse-ui-tooltip-border-default);
+        border-bottom: 1px solid var(--gse-ui-tooltip-border-default);
+      }
+    }
+
+    &[data-placement='left'],
+    &[data-placement='left-start'],
+    &[data-placement='left-end'] {
+      .gux-arrow {
+        border-top: 1px solid var(--gse-ui-tooltip-border-default);
+        border-right: 1px solid var(--gse-ui-tooltip-border-default);
+      }
+    }
+
+    &[data-placement='right'],
+    &[data-placement='right-start'],
+    &[data-placement='right-end'] {
+      .gux-arrow {
+        border-bottom: 1px solid var(--gse-ui-tooltip-border-default);
+        border-left: 1px solid var(--gse-ui-tooltip-border-default);
+      }
+    }
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
