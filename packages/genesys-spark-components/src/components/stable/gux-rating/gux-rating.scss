@@ -1,0 +1,40 @@
+/**
+ * @prop --gse-ui-star-rating-focus-ring
+ * @prop --gse-ui-star-rating-icon-selected
+ * @prop --gse-ui-star-rating-icon-hover
+*/
+
+:host {
+  display: inline-flex;
+  user-select: none;
+}
+
+:host(:host:focus-visible) {
+  outline: 2px solid var(--gse-ui-star-rating-focus-ring);
+  outline-offset: 1px;
+  box-shadow: 0 0 0 1px var(--gse-ui-star-rating-icon-selected);
+}
+
+.gux-rating-star-container {
+  color: var(--gse-ui-star-rating-icon-selected);
+
+  &.gux-disabled {
+    opacity: 0.5;
+  }
+
+  gux-icon {
+    width: 16px;
+    height: 16px;
+    color: var(--gse-ui-star-rating-icon-selected);
+
+    &:focus-visible {
+      outline: 2px solid var(--gse-ui-star-rating-focus-ring);
+      outline-offset: 1px;
+      box-shadow: 0 0 0 1px var(--gse-ui-star-rating-focus-ring);
+    }
+  }
+
+  &:hover:not(.gux-disabled) {
+    color: var(--gse-ui-star-rating-icon-hover);
+  }
+}

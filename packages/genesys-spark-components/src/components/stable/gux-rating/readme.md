@@ -20,6 +20,15 @@
 | `value`    | `value`     |             | `number`  | `0`     |
 
 
+## CSS Custom Properties
+
+| Name                                 | Description |
+| ------------------------------------ | ----------- |
+| `--gse-ui-star-rating-focus-ring`    |             |
+| `--gse-ui-star-rating-icon-hover`    |             |
+| `--gse-ui-star-rating-icon-selected` |             |
+
+
 ## Dependencies
 
 ### Depends on
