@@ -17,13 +17,6 @@ This is a simple calendar component, that allows the user to select a date.
 | `value`          | `value`             | The calendar current selected date                                                                            | `string`                                      | `''`                   |
 
 
-## Events
-
-| Event   | Description                        | Type                  |
-| ------- | ---------------------------------- | --------------------- |
-| `input` | Triggered when user selects a date | `CustomEvent<string>` |
-
-
 ## Methods
 
 ### `focusPreviewDate() => Promise<void>`
