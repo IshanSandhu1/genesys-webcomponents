@@ -166,7 +166,7 @@ export class GuxCalendarBeta {
 
   renderHeader(): JSX.Element {
     return (
-      <div class="header">
+      <div class="header fw-700">
         <button
           type="button"
           class="gux-left"
@@ -195,7 +195,7 @@ export class GuxCalendarBeta {
           {this.getMonthHeader().map(
             headerDay =>
               (
-                <div class="day-letter" aria-label="Week day">
+                <div class="day-letter fw-800" aria-label="Week day">
                   {headerDay}
                 </div>
               ) as JSX.Element
@@ -221,7 +221,8 @@ export class GuxCalendarBeta {
                           class={{
                             'content-date': true,
                             'gux-disabled': day.disabled,
-                            'gux-selected': day.selected
+                            'gux-selected': day.selected,
+                            'fw-400': true
                           }}
                         >
                           {day.date.getDate()}
