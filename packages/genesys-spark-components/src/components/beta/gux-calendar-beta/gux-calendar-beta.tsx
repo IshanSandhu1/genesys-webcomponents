@@ -21,12 +21,12 @@ export class GuxCalendarBeta {
     this.value = date;
   }
 
-  setDateForArrowKey(event: KeyboardEvent, newDateValue: number): void {
+  setDateAfterArrowKeyPress(event: KeyboardEvent, newDayValue: number): void {
     event.preventDefault();
     this.value = new Date(
       this.value.getFullYear(),
       this.value.getMonth(),
-      this.value.getDate() + newDateValue,
+      this.value.getDate() + newDayValue,
       0,
       0,
       0
@@ -44,16 +44,16 @@ export class GuxCalendarBeta {
         this.onDateClick(this.value);
         break;
       case 'ArrowDown':
-        this.setDateForArrowKey(event, 7);
+        this.setDateAfterArrowKeyPress(event, 7);
         break;
       case 'ArrowUp':
-        this.setDateForArrowKey(event, -7);
+        this.setDateAfterArrowKeyPress(event, -7);
         break;
       case 'ArrowLeft':
-        this.setDateForArrowKey(event, -1);
+        this.setDateAfterArrowKeyPress(event, -1);
         break;
       case 'ArrowRight':
-        this.setDateForArrowKey(event, 1);
+        this.setDateAfterArrowKeyPress(event, 1);
         break;
       case 'PageUp':
         this.incrementMonth();
@@ -83,7 +83,7 @@ export class GuxCalendarBeta {
     }
   }
 
-  getMonthAndYear(): string {
+  getMonthAndYearDisplay(): string {
     return `${this.value.toLocaleString('default', {
       month: 'long'
     })} ${this.value.getFullYear()}`;
@@ -174,7 +174,9 @@ export class GuxCalendarBeta {
         >
           <gux-icon decorative icon-name="chevron-small-left"></gux-icon>
         </button>
-        <span class="header-month-and-year">{this.getMonthAndYear()}</span>
+        <span class="header-month-and-year">
+          {this.getMonthAndYearDisplay()}
+        </span>
         <button
           type="button"
           class="gux-right"
