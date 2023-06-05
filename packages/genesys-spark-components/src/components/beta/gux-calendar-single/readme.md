@@ -5,19 +5,6 @@
 <!-- Auto Generated Below -->
 
 
-## Methods
-
-### `focusSelectedDate() => Promise<void>`
-
-
-
-#### Returns
-
-Type: `Promise<void>`
-
-
-
-
 ## Dependencies
 
 ### Depends on

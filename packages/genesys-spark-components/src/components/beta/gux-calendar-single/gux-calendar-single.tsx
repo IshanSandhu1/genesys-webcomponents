@@ -39,7 +39,7 @@ export class GuxCalendar {
     );
     this.setSlotInputValue(this.value);
     afterNextRenderTimeout(() => {
-      void this.focusSelectedDate();
+      this.focusSelectedDate();
     });
   }
 
@@ -156,20 +156,19 @@ export class GuxCalendar {
 
     // Wait for render before focusing preview date
     afterNextRenderTimeout(() => {
-      void this.focusSelectedDate();
+      this.focusSelectedDate();
     });
   }
 
-  decrementMonth() {
+  decrementMonth(): void {
     this.changeMonth(-1);
   }
 
-  incrementMonth() {
+  incrementMonth(): void {
     this.changeMonth(1);
   }
 
-  @Method()
-  focusSelectedDate() {
+  private focusSelectedDate(): void {
     const target: HTMLTableCellElement = this.root.shadowRoot.querySelector(
       `.gux-content-date[data-date="${this.value.getTime()}"]`
     );
