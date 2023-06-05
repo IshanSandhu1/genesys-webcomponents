@@ -2,7 +2,9 @@
 @import (reference) '../../../style/typography.less';
 @import (reference) '../../../style/color-palette.less';
 
-.gux-calendar-beta {
+@palette-shadow: fade(@gux-black-30, 24%);
+
+.gux-calendar-single {
   box-sizing: border-box;
   display: inline-flex;
   flex-direction: column;
@@ -12,7 +14,7 @@
   border-radius: @gux-spacing-2xs @gux-spacing-2xs 0 0;
   box-shadow: 0 2px 4px @palette-shadow;
 
-  .header {
+  .gux-header {
     display: flex;
     align-items: center;
     padding: @gux-spacing-medium @gux-spacing-large;
@@ -22,9 +24,9 @@
     line-height: 16px;
     color: @gux-grey-100;
     text-align: center;
-    background-color: @gse-core-blueberry-600;
+    background-color: #4856cb;
 
-    .header-month-and-year {
+    .gux-header-month-and-year {
       padding-right: @gux-spacing-3xl;
       padding-left: @gux-spacing-3xl;
     }
@@ -39,12 +41,12 @@
     }
   }
 
-  .week-day-letters {
+  .gux-week-day-letters {
     padding-top: @gux-spacing-large;
     padding-right: @gux-spacing-xl;
     padding-left: @gux-spacing-xl;
 
-    .day-letter {
+    .gux-day-letter {
       display: inline-block;
       width: 16px;
       height: 16px;
@@ -53,7 +55,7 @@
     }
   }
 
-  .content {
+  .gux-content {
     padding-top: @gux-spacing-xs;
     padding-right: @gux-spacing-xl;
     padding-left: @gux-spacing-xl;
@@ -63,8 +65,8 @@
     border-bottom-left-radius: @gux-spacing-2xs;
   }
 
-  .content-week {
-    .content-date {
+  .gux-content-week {
+    .gux-content-date {
       display: inline-block;
       width: 28px;
       height: 28px;
@@ -82,7 +84,7 @@
       &.gux-selected {
         color: @gux-grey-100;
         // background-color: @gux-blueberry-60;
-        background-color: @gse-core-blueberry-600;
+        background-color: #4856cb;
         border-radius: 4px;
       }
 
@@ -90,7 +92,7 @@
         color: @gux-grey-100;
         cursor: pointer;
         // background-color: @gux-blueberry-60;
-        background-color: @gse-core-blueberry-600;
+        background-color: #4856cb;
         border-radius: 4px;
       }
     }

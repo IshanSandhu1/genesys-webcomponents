@@ -1,14 +1,15 @@
 import { Component, Element, h, JSX, Method, State } from '@stencil/core';
 import { hasSlot } from '@utils/dom/has-slot';
-import { IWeekElement } from './gux-calendar-beta.types';
+import { IWeekElement } from './gux-calendar.types';
 import { afterNextRenderTimeout } from '@utils/dom/after-next-render';
+import { fromIsoDate } from '@utils/date/iso-dates';
 
 @Component({
-  styleUrl: 'gux-calendar-beta.less',
-  tag: 'gux-calendar-beta',
+  styleUrl: 'gux-calendar-single.less',
+  tag: 'gux-calendar-single',
   shadow: true
 })
-export class GuxCalendarBeta {
+export class GuxCalendar {
   @Element()
   root: HTMLElement;
 
@@ -19,6 +20,11 @@ export class GuxCalendarBeta {
 
   onDateClick(date: Date): void {
     this.value = date;
+    this.setSlotInputValue(date);
+  }
+
+  setSlotInputValue(date: Date) {
+    this.input.value = date.toISOString().substring(0, 10);
   }
 
   setDateAfterArrowKeyPress(event: KeyboardEvent, newDayValue: number): void {
@@ -31,6 +37,7 @@ export class GuxCalendarBeta {
       0,
       0
     );
+    this.setSlotInputValue(this.value);
     afterNextRenderTimeout(() => {
       void this.focusSelectedDate();
     });
@@ -81,6 +88,12 @@ export class GuxCalendarBeta {
       this.value = new Date(valueProp);
       this.value.setHours(0, 0, 0, 0);
     }
+
+    // Set the calendar selected value when the slot input value changes
+    this.input.addEventListener('input', () => {
+      this.value = fromIsoDate(this.input.value);
+      this.value.setHours(0, 0, 0, 0);
+    });
   }
 
   getMonthAndYearDisplay(): string {
@@ -139,6 +152,7 @@ export class GuxCalendarBeta {
       0,
       0
     );
+    this.setSlotInputValue(this.value);
 
     // Wait for render before focusing preview date
     afterNextRenderTimeout(() => {
@@ -146,18 +160,18 @@ export class GuxCalendarBeta {
     });
   }
 
-  decrementMonth(): void {
+  decrementMonth() {
     this.changeMonth(-1);
   }
 
-  incrementMonth(): void {
+  incrementMonth() {
     this.changeMonth(1);
   }
 
   @Method()
-  focusSelectedDate(): void {
+  focusSelectedDate() {
     const target: HTMLTableCellElement = this.root.shadowRoot.querySelector(
-      `.content-date[data-date="${this.value.getTime()}"]`
+      `.gux-content-date[data-date="${this.value.getTime()}"]`
     );
     if (target) {
       target.focus();
@@ -166,7 +180,7 @@ export class GuxCalendarBeta {
 
   renderHeader(): JSX.Element {
     return (
-      <div class="header">
+      <div class="gux-header">
         <button
           type="button"
           class="gux-left"
@@ -174,7 +188,7 @@ export class GuxCalendarBeta {
         >
           <gux-icon decorative icon-name="chevron-small-left"></gux-icon>
         </button>
-        <span class="header-month-and-year">
+        <span class="gux-header-month-and-year">
           {this.getMonthAndYearDisplay()}
         </span>
         <button
@@ -191,22 +205,22 @@ export class GuxCalendarBeta {
   renderContent(): JSX.Element {
     return (
       <div>
-        <div class="week-day-letters">
+        <div class="gux-week-day-letters">
           {this.getMonthHeader().map(
             headerDay =>
               (
-                <div class="day-letter" aria-label="Week day">
+                <div class="gux-day-letter" aria-label="Week day">
                   {headerDay}
                 </div>
               ) as JSX.Element
           )}
         </div>
 
-        <div class="content">
+        <div class="gux-content">
           {this.getMonthDays().map(
             week =>
               (
-                <div class="content-week">
+                <div class="gux-content-week">
                   {week.dates.map(
                     day =>
                       (
@@ -219,7 +233,7 @@ export class GuxCalendarBeta {
                           tabindex={day.selected ? '0' : '-1'}
                           onKeyDown={e => void this.onKeyDown(e)}
                           class={{
-                            'content-date': true,
+                            'gux-content-date': true,
                             'gux-disabled': day.disabled,
                             'gux-selected': day.selected
                           }}
@@ -238,7 +252,7 @@ export class GuxCalendarBeta {
 
   render(): JSX.Element {
     return (
-      <div class="gux-calendar-beta">
+      <div class="gux-calendar-single">
         <slot aria-hidden="true" name="date" />
         {this.renderHeader()}
         {this.renderContent()}
