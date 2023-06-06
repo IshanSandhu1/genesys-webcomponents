@@ -127,13 +127,18 @@ export class GuxCalendar {
     const totalDayCount = 42 + firstDayOfMonthIndex;
     const currentDate = getFirstOfMonth(this.value);
 
-    // We want to include backfilled days before the first day of the month. For instance, if the first of the month
-    // lands on the 15th, then we want to backfill the 1st-14th. Make sure to account for the locale start day of the week.
+    // Initialize the first date in the calendar based on the locale week day start and where the first of the month resides
+    //
+    // For instance, if we're using 'en' locale and we're rendering May, 2023, then May 1st resides on a Monday,
+    // which means the first date to render in the calendar will be April 30, since Sunday is the first week day we want
+    // to render in the calendar based on 'en' locale.
     if (firstDayOfMonthIndex > 0) {
       currentDate.setDate(
         currentDate.getDate() - firstDayOfMonthIndex + this.startDayOfWeek
       );
     }
+
+    // Generate all of the dates in the current month, starting from the initialized date
     for (let d = 0; d < totalDayCount; d += 1) {
       if (weekDayIndex % 7 === 0) {
         weeks.push(currentWeek);
