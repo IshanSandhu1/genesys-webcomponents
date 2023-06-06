@@ -4,6 +4,10 @@ export function getMonthAndYearDisplay(date: Date): string {
   })} ${date.getFullYear()}`;
 }
 
+export function getFirstOfMonth(date: Date): Date {
+  return new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0);
+}
+
 export function getWeekdays(
   locale: Intl.LocalesArgument,
   startDayOfWeek: number

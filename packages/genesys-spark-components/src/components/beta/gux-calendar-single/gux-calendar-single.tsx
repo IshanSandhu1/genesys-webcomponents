@@ -3,7 +3,11 @@ import { hasSlot } from '@utils/dom/has-slot';
 import { IWeekElement, GuxCalendarDayOfWeek } from './gux-calendar.types';
 import { afterNextRenderTimeout } from '@utils/dom/after-next-render';
 import { fromIsoDate } from '@utils/date/iso-dates';
-import { getMonthAndYearDisplay, getWeekdays } from '@utils/calendar/calendar';
+import {
+  getMonthAndYearDisplay,
+  getWeekdays,
+  getFirstOfMonth
+} from '@utils/calendar/calendar';
 import { getDesiredLocale, getStartOfWeek } from '../../../i18n';
 
 @Component({
@@ -114,28 +118,14 @@ export class GuxCalendar {
   }
 
   private getMonthDays(): IWeekElement[] {
-    const firstOfMonth = new Date(
-      this.value.getFullYear(),
-      this.value.getMonth(),
-      1,
-      0,
-      0,
-      0
-    );
+    const firstOfMonth = getFirstOfMonth(this.value);
     const weeks = [];
     let currentWeek = { dates: [] };
     let weekDayIndex = 0;
     const currentMonth = firstOfMonth.getMonth();
     const firstDayOfMonthIndex = firstOfMonth.getDay();
     const totalDayCount = 42 + firstDayOfMonthIndex;
-    const currentDate = new Date(
-      firstOfMonth.getFullYear(),
-      firstOfMonth.getMonth(),
-      1,
-      0,
-      0,
-      0
-    );
+    const currentDate = getFirstOfMonth(this.value);
 
     // We want to include backfilled days before the first day of the month. For instance, if the first of the month
     // lands on the 15th, then we want to backfill the 1st-14th. Make sure to account for the locale start day of the week.
