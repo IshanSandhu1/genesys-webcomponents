@@ -14,8 +14,8 @@
 ### Graph
 ```mermaid
 graph TD;
-  gux-calendar-single --> gux-icon
-  style gux-calendar-single fill:#f9f,stroke:#333,stroke-width:4px
+  gux-calendar-beta --> gux-icon
+  style gux-calendar-beta fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
 ----------------------------------------------

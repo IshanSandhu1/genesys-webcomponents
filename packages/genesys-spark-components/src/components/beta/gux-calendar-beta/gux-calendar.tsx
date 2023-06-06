@@ -11,8 +11,8 @@ import {
 import { getDesiredLocale, getStartOfWeek } from '../../../i18n';
 
 @Component({
-  styleUrl: 'gux-calendar-single.less',
-  tag: 'gux-calendar-single',
+  styleUrl: 'gux-calendar.less',
+  tag: 'gux-calendar-beta',
   shadow: true
 })
 export class GuxCalendar {
@@ -265,7 +265,7 @@ export class GuxCalendar {
 
   render(): JSX.Element {
     return (
-      <div class="gux-calendar-single">
+      <div class="gux-calendar-beta">
         <slot aria-hidden="true" name="date" />
         {this.renderHeader()}
         {this.renderContent()}
