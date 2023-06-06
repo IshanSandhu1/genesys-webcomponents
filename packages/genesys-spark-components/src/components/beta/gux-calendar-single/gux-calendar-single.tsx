@@ -1,8 +1,15 @@
-import { Component, Element, h, JSX, Method, State } from '@stencil/core';
+import { Component, Element, h, JSX, State } from '@stencil/core';
 import { hasSlot } from '@utils/dom/has-slot';
-import { IWeekElement } from './gux-calendar.types';
+import { IWeekElement, GuxCalendarDayOfWeek } from './gux-calendar.types';
 import { afterNextRenderTimeout } from '@utils/dom/after-next-render';
 import { fromIsoDate } from '@utils/date/iso-dates';
+import {
+  getMonthAndYearDisplay,
+  getFirstOfMonth,
+  getWeekdays,
+  firstDateInMonth
+} from '@utils/calendar/calendar';
+import { getDesiredLocale, getStartOfWeek } from '../../../i18n';
 
 @Component({
   styleUrl: 'gux-calendar-single.less',
@@ -13,21 +20,59 @@ export class GuxCalendar {
   @Element()
   root: HTMLElement;
 
-  private input: HTMLInputElement;
-
   @State()
-  value: Date = new Date();
+  private value: Date = new Date();
 
-  onDateClick(date: Date): void {
+  private locale: string = 'en';
+  private input: HTMLInputElement;
+  private startDayOfWeek: GuxCalendarDayOfWeek;
+
+  componentWillLoad(): void {
+    this.locale = getDesiredLocale(this.root);
+    this.startDayOfWeek = this.startDayOfWeek || getStartOfWeek(this.locale);
+    const hasDateSlot = hasSlot(this.root, 'date');
+    if (!hasDateSlot) {
+      return;
+    }
+
+    // Get date input slot element
+    this.input = this.root.querySelector('input[slot="date"]');
+
+    if (!this.input.value) {
+      const now = new Date();
+      now.setHours(0, 0, 0, 0);
+      this.value = now;
+    } else {
+      this.value = new Date(this.input.value);
+      this.value.setHours(0, 0, 0, 0);
+    }
+
+    this.onSlotInputChange();
+  }
+
+  /**
+   *  Set the selected calendar value when the slot input value changes
+   */
+  private onSlotInputChange(): void {
+    this.input.addEventListener('input', () => {
+      this.value = fromIsoDate(this.input.value);
+      this.value.setHours(0, 0, 0, 0);
+    });
+  }
+
+  private onDateClick(date: Date): void {
     this.value = date;
     this.setSlotInputValue(date);
   }
 
-  setSlotInputValue(date: Date) {
+  private setSlotInputValue(date: Date) {
     this.input.value = date.toISOString().substring(0, 10);
   }
 
-  setDateAfterArrowKeyPress(event: KeyboardEvent, newDayValue: number): void {
+  private setDateAfterArrowKeyPress(
+    event: KeyboardEvent,
+    newDayValue: number
+  ): void {
     event.preventDefault();
     this.value = new Date(
       this.value.getFullYear(),
@@ -38,12 +83,14 @@ export class GuxCalendar {
       0
     );
     this.setSlotInputValue(this.value);
+
+    // Wait for render before focusing preview date
     afterNextRenderTimeout(() => {
       this.focusSelectedDate();
     });
   }
 
-  onKeyDown(event: KeyboardEvent): void {
+  private onKeyDown(event: KeyboardEvent): void {
     switch (event.key) {
       case ' ':
       case 'Enter':
@@ -71,54 +118,16 @@ export class GuxCalendar {
     }
   }
 
-  componentWillLoad(): void {
-    const hasDateSlot = hasSlot(this.root, 'date');
-    if (!hasDateSlot) {
-      return;
-    }
-
-    this.input = this.root.querySelector('input[slot="date"]');
-    const valueProp = this.input.value;
-
-    if (!valueProp) {
-      const now = new Date();
-      now.setHours(0, 0, 0, 0);
-      this.value = now;
-    } else {
-      this.value = new Date(valueProp);
-      this.value.setHours(0, 0, 0, 0);
-    }
-
-    // Set the calendar selected value when the slot input value changes
-    this.input.addEventListener('input', () => {
-      this.value = fromIsoDate(this.input.value);
-      this.value.setHours(0, 0, 0, 0);
-    });
-  }
-
-  getMonthAndYearDisplay(): string {
-    return `${this.value.toLocaleString('default', {
-      month: 'long'
-    })} ${this.value.getFullYear()}`;
-  }
-
-  getMonthHeader(): string[] {
-    return ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-  }
-
-  getFirstOfMonth(date: Date): Date {
-    return new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0);
-  }
-
-  getMonthDays(): IWeekElement[] {
-    const firstOfMonth = this.getFirstOfMonth(this.value);
+  private getMonthDays(): IWeekElement[] {
+    const firstOfMonth = getFirstOfMonth(this.value);
+    // const firstOfMonth = firstDateInMonth(this.value.getMonth(), this.value.getFullYear(), this.startDayOfWeek);
     const weeks = [];
     let currentWeek = { dates: [] };
     let weekDayIndex = 0;
     const currentMonth = firstOfMonth.getMonth();
     const firstDayOfMonthIndex = firstOfMonth.getDay();
     const totalDayCount = 42 + firstDayOfMonthIndex;
-    const currentDate = this.getFirstOfMonth(firstOfMonth);
+    const currentDate = getFirstOfMonth(firstOfMonth);
 
     // We want to include backfilled days before the first day of the month. For instance, if the first of the month
     // lands on the 15th, then we want to backfill the 1st-14th
@@ -143,7 +152,7 @@ export class GuxCalendar {
     return weeks as IWeekElement[];
   }
 
-  changeMonth(newMonthValue: number): void {
+  private changeMonth(newMonthValue: number): void {
     this.value = new Date(
       this.value.getFullYear(),
       this.value.getMonth() + newMonthValue,
@@ -160,11 +169,11 @@ export class GuxCalendar {
     });
   }
 
-  decrementMonth(): void {
+  private decrementMonth(): void {
     this.changeMonth(-1);
   }
 
-  incrementMonth(): void {
+  private incrementMonth(): void {
     this.changeMonth(1);
   }
 
@@ -177,7 +186,7 @@ export class GuxCalendar {
     }
   }
 
-  renderHeader(): JSX.Element {
+  private renderHeader(): JSX.Element {
     return (
       <div class="gux-header">
         <button
@@ -188,7 +197,7 @@ export class GuxCalendar {
           <gux-icon decorative icon-name="chevron-small-left"></gux-icon>
         </button>
         <span class="gux-header-month-and-year">
-          {this.getMonthAndYearDisplay()}
+          {getMonthAndYearDisplay(this.value)}
         </span>
         <button
           type="button"
@@ -201,15 +210,15 @@ export class GuxCalendar {
     ) as JSX.Element;
   }
 
-  renderContent(): JSX.Element {
+  private renderContent(): JSX.Element {
     return (
       <div>
         <div class="gux-week-day-letters">
-          {this.getMonthHeader().map(
-            headerDay =>
+          {getWeekdays(this.locale, this.startDayOfWeek).map(
+            day =>
               (
                 <div class="gux-day-letter" aria-label="Week day">
-                  {headerDay}
+                  {day}
                 </div>
               ) as JSX.Element
           )}
