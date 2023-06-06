@@ -4,26 +4,6 @@ export function getMonthAndYearDisplay(date: Date): string {
   })} ${date.getFullYear()}`;
 }
 
-export function getMonthHeader(): string[] {
-  return ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-}
-
-export function getFirstOfMonth(date: Date): Date {
-  return new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0);
-}
-
-export function firstDateInMonth(
-  month: number,
-  year: number,
-  startDayOfWeek: number
-) {
-  const startDate = new Date(year, month, 1, 1, 0, 0, 0);
-  const firstDayOfMonth = startDate.getDay();
-  const firstDayOffset = (-1 * (startDayOfWeek - firstDayOfMonth - 7)) % 7;
-
-  return new Date(startDate.getTime() - firstDayOffset * (86400 * 1000));
-}
-
 export function getWeekdays(
   locale: Intl.LocalesArgument,
   startDayOfWeek: number
