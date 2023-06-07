@@ -26,7 +26,8 @@ export class GuxCalendar {
   private previewValue: Date;
 
   @State()
-  // Preview value will not be visible when the user clicks on the next or previous month arrows in the header
+  // Preview value will not be visible when the user clicks on the next or previous month arrows in the header,
+  // otherwise we will show the preview value as a circular border around the date
   private showPreviewValue: boolean = false;
 
   private locale: string = 'en';
@@ -52,6 +53,7 @@ export class GuxCalendar {
       this.value = new Date(this.input.value);
       this.value.setHours(0, 0, 0, 0);
     }
+    // Initialize preview value to be the same as the selected value
     this.previewValue = new Date(this.value.getTime());
 
     this.onSlotInputChange();
@@ -163,7 +165,10 @@ export class GuxCalendar {
         date: new Date(currentDate),
         disabled: currentMonth !== currentDate.getMonth(),
         selected: this.value.getTime() === currentDate.getTime(),
-        previewed: this.previewValue?.getTime() === currentDate.getTime()
+        previewed:
+          this.showPreviewValue &&
+          this.previewValue?.getTime() === currentDate.getTime() &&
+          this.previewValue?.getDate() !== this.value.getTime() // Do not show preview value for date if it's already selected
       });
       weekDayIndex += 1;
       currentDate.setDate(currentDate.getDate() + 1);
@@ -204,16 +209,23 @@ export class GuxCalendar {
     }
   }
 
+  private prevMonthClick(): void {
+    this.showPreviewValue = false;
+    this.decrementMonth();
+  }
+
+  private nextMonthClick(): void {
+    this.showPreviewValue = false;
+    this.incrementMonth();
+  }
+
   private renderHeader(): JSX.Element {
     return (
       <div class="gux-header">
         <button
           type="button"
           class="gux-left"
-          onClick={() => {
-            this.showPreviewValue = false;
-            this.decrementMonth();
-          }}
+          onClick={() => this.prevMonthClick()}
         >
           <gux-icon decorative icon-name="chevron-small-left"></gux-icon>
         </button>
@@ -223,10 +235,7 @@ export class GuxCalendar {
         <button
           type="button"
           class="gux-right"
-          onClick={() => {
-            this.showPreviewValue = false;
-            this.incrementMonth();
-          }}
+          onClick={() => this.nextMonthClick()}
         >
           <gux-icon decorative icon-name="chevron-small-right"></gux-icon>
         </button>
@@ -268,10 +277,7 @@ export class GuxCalendar {
                             'gux-content-date': true,
                             'gux-disabled': day.disabled,
                             'gux-selected': day.selected,
-                            'gux-previewed':
-                              this.showPreviewValue &&
-                              day.previewed &&
-                              !day.selected
+                            'gux-previewed': day.previewed
                           }}
                         >
                           {day.date.getDate()}
