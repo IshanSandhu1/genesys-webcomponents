@@ -22,6 +22,13 @@ export class GuxCalendar {
   @State()
   private value: Date = new Date();
 
+  @State()
+  private previewValue: Date;
+
+  @State()
+  // Preview value will not be visible when the user clicks on the next or previous month arrows in the header
+  private showPreviewValue: boolean = false;
+
   private locale: string = 'en';
   private input: HTMLInputElement;
   private startDayOfWeek: GuxCalendarDayOfWeek;
@@ -45,6 +52,7 @@ export class GuxCalendar {
       this.value = new Date(this.input.value);
       this.value.setHours(0, 0, 0, 0);
     }
+    this.previewValue = new Date(this.value.getTime());
 
     this.onSlotInputChange();
   }
@@ -60,7 +68,8 @@ export class GuxCalendar {
   }
 
   private onDateClick(date: Date): void {
-    this.value = date;
+    this.value = new Date(date.getTime());
+    this.previewValue = new Date(date.getTime());
     this.setSlotInputValue(date);
   }
 
@@ -73,15 +82,14 @@ export class GuxCalendar {
     newDayValue: number
   ): void {
     event.preventDefault();
-    this.value = new Date(
-      this.value.getFullYear(),
-      this.value.getMonth(),
-      this.value.getDate() + newDayValue,
+    this.previewValue = new Date(
+      this.previewValue.getFullYear(),
+      this.previewValue.getMonth(),
+      this.previewValue.getDate() + newDayValue,
       0,
       0,
       0
     );
-    this.setSlotInputValue(this.value);
 
     // Wait for render before focusing preview date
     afterNextRenderTimeout(() => {
@@ -90,11 +98,15 @@ export class GuxCalendar {
   }
 
   private onKeyDown(event: KeyboardEvent): void {
+    this.showPreviewValue = true;
+
     switch (event.key) {
       case ' ':
+        this.showPreviewValue = false;
+        break;
       case 'Enter':
         event.preventDefault();
-        this.onDateClick(this.value);
+        this.onDateClick(this.previewValue);
         break;
       case 'ArrowDown':
         this.setDateAfterArrowKeyPress(event, 7);
@@ -118,27 +130,28 @@ export class GuxCalendar {
   }
 
   private getMonthDays(): IWeekElement[] {
-    const firstOfMonth = getFirstOfMonth(this.value);
+    const firstOfMonth = getFirstOfMonth(this.previewValue);
     const weeks = [];
     let currentWeek = { dates: [] };
     let weekDayIndex = 0;
     const currentMonth = firstOfMonth.getMonth();
     const firstDayOfMonthIndex = firstOfMonth.getDay();
     const totalDayCount = 42 + firstDayOfMonthIndex;
-    const currentDate = getFirstOfMonth(this.value);
+    const currentDate = new Date(firstOfMonth.getTime());
 
-    // Initialize the first date in the calendar based on the locale week day start and where the first of the month resides
+    // Initialize the first date in the calendar based on the locale week day start's offset and where the first of the
+    // month should reside in the calendar.
     //
     // For instance, if we're using 'en' locale and we're rendering May, 2023, then May 1st resides on a Monday,
     // which means the first date to render in the calendar will be April 30, since Sunday is the first week day we want
-    // to render in the calendar based on 'en' locale.
+    // to render in the calendar for the 'en' locale.
     if (firstDayOfMonthIndex > 0) {
       currentDate.setDate(
         currentDate.getDate() - firstDayOfMonthIndex + this.startDayOfWeek
       );
     }
 
-    // Generate all of the dates in the current month, starting from the initialized date
+    // Generate all of the dates in the current month, starting from the first date in the month
     for (let d = 0; d < totalDayCount; d += 1) {
       if (weekDayIndex % 7 === 0) {
         weeks.push(currentWeek);
@@ -149,7 +162,8 @@ export class GuxCalendar {
       currentWeek.dates.push({
         date: new Date(currentDate),
         disabled: currentMonth !== currentDate.getMonth(),
-        selected: this.value.getTime() === currentDate.getTime()
+        selected: this.value.getTime() === currentDate.getTime(),
+        previewed: this.previewValue?.getTime() === currentDate.getTime()
       });
       weekDayIndex += 1;
       currentDate.setDate(currentDate.getDate() + 1);
@@ -158,15 +172,14 @@ export class GuxCalendar {
   }
 
   private changeMonth(newMonthValue: number): void {
-    this.value = new Date(
-      this.value.getFullYear(),
-      this.value.getMonth() + newMonthValue,
+    this.previewValue = new Date(
+      this.previewValue.getFullYear(),
+      this.previewValue.getMonth() + newMonthValue,
       1,
       0,
       0,
       0
     );
-    this.setSlotInputValue(this.value);
 
     // Wait for render before focusing preview date
     afterNextRenderTimeout(() => {
@@ -197,17 +210,23 @@ export class GuxCalendar {
         <button
           type="button"
           class="gux-left"
-          onClick={() => this.decrementMonth()}
+          onClick={() => {
+            this.showPreviewValue = false;
+            this.decrementMonth();
+          }}
         >
           <gux-icon decorative icon-name="chevron-small-left"></gux-icon>
         </button>
         <span class="gux-header-month-and-year">
-          {getMonthAndYearDisplay(this.value)}
+          {getMonthAndYearDisplay(this.previewValue)}
         </span>
         <button
           type="button"
           class="gux-right"
-          onClick={() => this.incrementMonth()}
+          onClick={() => {
+            this.showPreviewValue = false;
+            this.incrementMonth();
+          }}
         >
           <gux-icon decorative icon-name="chevron-small-right"></gux-icon>
         </button>
@@ -248,7 +267,11 @@ export class GuxCalendar {
                           class={{
                             'gux-content-date': true,
                             'gux-disabled': day.disabled,
-                            'gux-selected': day.selected
+                            'gux-selected': day.selected,
+                            'gux-previewed':
+                              this.showPreviewValue &&
+                              day.previewed &&
+                              !day.selected
                           }}
                         >
                           {day.date.getDate()}

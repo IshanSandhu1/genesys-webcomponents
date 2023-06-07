@@ -27,8 +27,7 @@
     background-color: #4856cb;
 
     .gux-header-month-and-year {
-      padding-right: @gux-spacing-3xl;
-      padding-left: @gux-spacing-3xl;
+      width: 150px;
     }
 
     .gux-left,
@@ -76,6 +75,8 @@
       line-height: 28px;
       text-align: center;
       vertical-align: middle;
+      border: none;
+      outline: none;
 
       &.gux-disabled {
         color: fade(@gux-black-50, 50%);
@@ -85,7 +86,9 @@
         color: @gux-grey-100;
         // background-color: @gux-blueberry-60;
         background-color: #4856cb;
+        border: none;
         border-radius: 4px;
+        outline: none;
       }
 
       &:hover {
@@ -94,6 +97,12 @@
         // background-color: @gux-blueberry-60;
         background-color: #4856cb;
         border-radius: 4px;
+      }
+
+      &.gux-previewed {
+        // border: 1px solid @gux-blueberry-60;
+        border: 1px solid #4856cb;
+        border-radius: 18px;
       }
     }
   }
