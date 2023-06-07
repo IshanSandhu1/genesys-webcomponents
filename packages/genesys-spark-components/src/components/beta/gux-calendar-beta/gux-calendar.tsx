@@ -168,7 +168,7 @@ export class GuxCalendar {
         previewed:
           this.showPreviewValue &&
           this.previewValue?.getTime() === currentDate.getTime() &&
-          this.previewValue?.getDate() !== this.value.getTime() // Do not show preview value for date if it's already selected
+          this.previewValue?.getTime() !== this.value.getTime() // Do not show preview value for date if it's already selected
       });
       weekDayIndex += 1;
       currentDate.setDate(currentDate.getDate() + 1);
