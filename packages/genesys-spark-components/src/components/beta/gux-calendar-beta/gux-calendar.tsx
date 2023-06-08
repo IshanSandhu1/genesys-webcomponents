@@ -20,7 +20,7 @@ export class GuxCalendar {
   root: HTMLElement;
 
   @State()
-  private value: Date = new Date();
+  private selectedValue: Date = new Date();
 
   @State()
   private previewValue: Date;
@@ -32,6 +32,9 @@ export class GuxCalendar {
 
   private locale: string = 'en';
   private input: HTMLInputElement;
+
+  // Keeps track of the start day of the week based on user's locale
+  // Some locales will have the start day of the week be different than others
   private startDayOfWeek: GuxCalendarDayOfWeek;
 
   componentWillLoad(): void {
@@ -48,13 +51,13 @@ export class GuxCalendar {
     if (!this.input.value) {
       const now = new Date();
       now.setHours(0, 0, 0, 0);
-      this.value = now;
+      this.selectedValue = now;
     } else {
-      this.value = new Date(this.input.value);
-      this.value.setHours(0, 0, 0, 0);
+      this.selectedValue = new Date(this.input.value);
+      this.selectedValue.setHours(0, 0, 0, 0);
     }
     // Initialize preview value to be the same as the selected value
-    this.previewValue = new Date(this.value.getTime());
+    this.previewValue = new Date(this.selectedValue.getTime());
 
     this.onSlotInputChange();
   }
@@ -64,13 +67,13 @@ export class GuxCalendar {
    */
   private onSlotInputChange(): void {
     this.input.addEventListener('input', () => {
-      this.value = fromIsoDate(this.input.value);
-      this.value.setHours(0, 0, 0, 0);
+      this.selectedValue = fromIsoDate(this.input.value);
+      this.selectedValue.setHours(0, 0, 0, 0);
     });
   }
 
   private onDateClick(date: Date): void {
-    this.value = new Date(date.getTime());
+    this.selectedValue = new Date(date.getTime());
     this.previewValue = new Date(date.getTime());
     this.setSlotInputValue(date);
   }
@@ -138,7 +141,7 @@ export class GuxCalendar {
     let weekDayIndex = 0;
     const currentMonth = firstOfMonth.getMonth();
     const firstDayOfMonthIndex = firstOfMonth.getDay();
-    const totalDayCount = 42 + firstDayOfMonthIndex;
+    const totalDayCount = 43 + firstDayOfMonthIndex;
     const currentDate = new Date(firstOfMonth.getTime());
 
     // Initialize the first date in the calendar based on the locale week day start's offset and where the first of the
@@ -164,11 +167,11 @@ export class GuxCalendar {
       currentWeek.dates.push({
         date: new Date(currentDate),
         disabled: currentMonth !== currentDate.getMonth(),
-        selected: this.value.getTime() === currentDate.getTime(),
+        selected: this.selectedValue.getTime() === currentDate.getTime(),
         previewed:
           this.showPreviewValue &&
           this.previewValue?.getTime() === currentDate.getTime() &&
-          this.previewValue?.getTime() !== this.value.getTime() // Do not show preview value for date if it's already selected
+          this.previewValue?.getTime() !== this.selectedValue.getTime() // Do not show preview value for date if it's already selected
       });
       weekDayIndex += 1;
       currentDate.setDate(currentDate.getDate() + 1);
@@ -202,7 +205,7 @@ export class GuxCalendar {
 
   private focusSelectedDate(): void {
     const target: HTMLTableCellElement = this.root.shadowRoot.querySelector(
-      `.gux-content-date[data-date="${this.value.getTime()}"]`
+      `.gux-content-date[data-date="${this.selectedValue.getTime()}"]`
     );
     if (target) {
       target.focus();
