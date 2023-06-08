@@ -11,7 +11,7 @@ import {
 import { getDesiredLocale, getStartOfWeek } from '../../../i18n';
 
 @Component({
-  styleUrl: 'gux-calendar.less',
+  styleUrl: 'gux-calendar.scss',
   tag: 'gux-calendar-beta',
   shadow: true
 })
