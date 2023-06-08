@@ -30,6 +30,10 @@ export class GuxCalendar {
   // otherwise we will show the preview value as a circular border around the date
   private showPreviewValue: boolean = false;
 
+  @State()
+  // Selected value will not be visible if the user's date input value is empty
+  private showSelectedValue: boolean = true;
+
   private locale: string = 'en';
   private input: HTMLInputElement;
 
@@ -51,13 +55,12 @@ export class GuxCalendar {
     // Get date input slot element
     this.input = this.root.querySelector('input[slot="date"]');
 
-    if (!this.input.value) {
-      const now = new Date();
-      now.setHours(0, 0, 0, 0);
-      this.selectedValue = now;
-    } else {
+    if (this.input.value) {
       this.selectedValue = new Date(this.input.value);
       this.selectedValue.setHours(0, 0, 0, 0);
+    } else {
+      this.selectedValue.setHours(0, 0, 0, 0);
+      this.showSelectedValue = false;
     }
     // Initialize preview value to be the same as the selected value
     this.previewValue = new Date(this.selectedValue.getTime());
@@ -70,12 +73,14 @@ export class GuxCalendar {
    */
   private onSlotInputChange(): void {
     this.input.addEventListener('input', () => {
-      this.selectedValue = fromIsoDate(this.input.value);
-      this.selectedValue.setHours(0, 0, 0, 0);
+      const value = fromIsoDate(this.input.value);
+      value.setHours(0, 0, 0, 0);
+      this.selectedValue = value;
     });
   }
 
   private onDateClick(date: Date): void {
+    this.showSelectedValue = true;
     this.selectedValue = new Date(date.getTime());
     this.previewValue = new Date(date.getTime());
     this.setSlotInputValue(date);
@@ -169,7 +174,9 @@ export class GuxCalendar {
       currentWeek.dates.push({
         date: new Date(currentDate),
         disabled: currentMonth !== currentDate.getMonth(),
-        selected: this.selectedValue.getTime() === currentDate.getTime(),
+        selected:
+          this.selectedValue.getTime() === currentDate.getTime() &&
+          this.showSelectedValue,
         previewed:
           this.showPreviewValue &&
           this.previewValue?.getTime() === currentDate.getTime() &&
