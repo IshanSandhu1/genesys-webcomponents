@@ -7,7 +7,7 @@ import {
   getMonthAndYearDisplay,
   getWeekdays,
   getFirstOfMonth
-} from '@utils/calendar/calendar';
+} from 'services/calendar/calendar';
 import { getDesiredLocale, getStartOfWeek } from '../../../i18n';
 
 @Component({
@@ -32,6 +32,9 @@ export class GuxCalendar {
 
   private locale: string = 'en';
   private input: HTMLInputElement;
+
+  // Total number of dates that will display for each month in the calendar
+  private MONTH_DATE_COUNT: number = 42;
 
   // Keeps track of the start day of the week based on user's locale
   // Some locales will have the start day of the week be different than others
@@ -141,7 +144,6 @@ export class GuxCalendar {
     let weekDayIndex = 0;
     const currentMonth = firstOfMonth.getMonth();
     const firstDayOfMonthIndex = firstOfMonth.getDay();
-    const totalDayCount = 43 + firstDayOfMonthIndex;
     const currentDate = new Date(firstOfMonth.getTime());
 
     // Initialize the first date in the calendar based on the locale week day start's offset and where the first of the
@@ -157,7 +159,7 @@ export class GuxCalendar {
     }
 
     // Generate all of the dates in the current month, starting from the first date in the month
-    for (let d = 0; d < totalDayCount; d += 1) {
+    for (let d = 0; d < this.MONTH_DATE_COUNT + 1; d += 1) {
       if (weekDayIndex % 7 === 0) {
         weeks.push(currentWeek);
         currentWeek = {
