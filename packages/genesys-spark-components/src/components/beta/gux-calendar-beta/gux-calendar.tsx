@@ -29,6 +29,9 @@ export class GuxCalendar {
   private minValue: Date;
 
   @State()
+  private maxValue: Date;
+
+  @State()
   // Preview value will not be visible when the user clicks on the next or previous month arrows in the header,
   // otherwise we will show the preview value as a circular border around the date
   private showPreviewValue: boolean = false;
@@ -72,6 +75,10 @@ export class GuxCalendar {
     if (this.input.min) {
       this.minValue = new Date(this.input.min);
       this.minValue.setHours(0, 0, 0, 0);
+    }
+    if (this.input.max) {
+      this.maxValue = new Date(this.input.max);
+      this.maxValue.setHours(0, 0, 0, 0);
     }
 
     this.onSlotInputChange();
@@ -179,8 +186,12 @@ export class GuxCalendar {
           dates: []
         };
       }
+
+      // Disable a date that is outside the defined date range boundaries
       const disabled =
-        this.minValue && currentDate.getTime() < this.minValue.getTime();
+        (this.minValue && currentDate.getTime() <= this.minValue.getTime()) ||
+        (this.maxValue && currentDate.getTime() > this.maxValue.getTime());
+
       currentWeek.dates.push({
         date: new Date(currentDate),
         disabled,

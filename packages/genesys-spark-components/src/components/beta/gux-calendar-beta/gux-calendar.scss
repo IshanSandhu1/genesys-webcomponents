@@ -3,20 +3,20 @@
   display: inline-flex;
   flex-direction: column;
   margin-top: 2px;
-  background: var(--gse-core-white);
-  border: 1px solid var(--gse-core-cornflower-300);
+  background: var(--gse-ui-calendar-day-date-foreground-selected);
+  border: 1px solid var(--gse-ui-calendar-day-date-foreground-selected);
   box-shadow: 0px 2px 4px rgba(34, 37, 41, 0.24);
   border-radius: 4px;
+  font-size: var(--gse-ui-calendar-selectors-default-font-size);
 
   .gux-header {
     display: flex;
     align-items: center;
     padding: 16 24;
-    font-size: 12px;
     font-style: normal;
-    font-weight: 700;
+    font-weight: var(--gse-ui-calendar-header-font-weight);
     line-height: 16px;
-    color: var(--gse-core-white);
+    color: var(--gse-ui-calendar-header-foreground-default);
     text-align: center;
     background-color: var(--gse-ui-calendar-header-background-default);
 
@@ -39,13 +39,13 @@
     padding-right: 32px;
     padding-left: 32px;
     text-align: center;
-    color: var(--gse-core-cornflower-900);
+    color: var(--gse-ui-calendar-day-date-foreground-default);
 
     .gux-week-day {
       display: inline-block;
       width: 28px;
       height: 16px;
-      font-weight: 800;
+      font-weight: var(--gse-ui-calendar-header-font-weight);
     }
   }
 
@@ -53,7 +53,7 @@
     padding-top: 8px;
     padding-right: 32px;
     padding-left: 32px;
-    color: var(--gse-core-cornflower-800);
+    color: var(--gse-ui-calendar-day-date-foreground-default);
     background-color: var(--gse-core-white);
     border-bottom-right-radius: 4px;
     border-bottom-left-radius: 4px;
@@ -64,7 +64,6 @@
       display: inline-block;
       width: 28px;
       height: 28px;
-      font-size: 12px;
       font-style: normal;
       font-weight: 400;
       line-height: 28px;
@@ -72,10 +71,10 @@
       vertical-align: middle;
       border: none;
       outline: none;
-      color: var(--gse-core-cornflower-600);
+      color: var(--gse-ui-calendar-day-date-background-selected-pff-month);
 
       &.gux-current-month {
-        color: var(--gse-core-cornflower-800);
+        color: var(--gse-ui-calendar-day-date-foreground-default);
       }
 
       &.gux-hidden {
@@ -87,7 +86,7 @@
       }
 
       &.gux-selected {
-        color: var(--gse-core-white);
+        color: var(--gse-ui-calendar-day-date-foreground-selected);
         background-color: var(
           --gse-ui-calendar-day-date-background-selected-same-month
         );
@@ -97,7 +96,7 @@
       }
 
       &:hover {
-        color: var(--gse-core-white);
+        color: var(--gse-ui-calendar-day-date-foreground-selected);
         cursor: pointer;
         background-color: var(--gse-ui-calendar-focus);
         border-radius: 4px;
@@ -105,7 +104,7 @@
 
       &.gux-previewed {
         margin: -1px;
-        border: 1px solid var(--gse-ui-calendar-day-date-background-default);
+        border: 1px solid var(--gse-ui-calendar-focus);
         border-radius: 18px;
       }
     }
