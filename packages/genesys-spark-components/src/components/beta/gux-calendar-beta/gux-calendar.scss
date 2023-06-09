@@ -72,13 +72,18 @@
       vertical-align: middle;
       border: none;
       outline: none;
+      color: var(--gse-core-cornflower-600);
+
+      &.gux-current-month {
+        color: var(--gse-core-cornflower-800);
+      }
 
       &.gux-hidden {
         display: none;
       }
 
       &.gux-disabled {
-        color: var(--gse-core-cornflower-600);
+        pointer-events: none;
       }
 
       &.gux-selected {

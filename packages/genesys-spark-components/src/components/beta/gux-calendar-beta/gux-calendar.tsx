@@ -26,6 +26,9 @@ export class GuxCalendar {
   private previewValue: Date;
 
   @State()
+  private minValue: Date;
+
+  @State()
   // Preview value will not be visible when the user clicks on the next or previous month arrows in the header,
   // otherwise we will show the preview value as a circular border around the date
   private showPreviewValue: boolean = false;
@@ -65,6 +68,11 @@ export class GuxCalendar {
     }
     // Initialize preview value to be the same as the selected value
     this.previewValue = new Date(this.selectedValue.getTime());
+
+    if (this.input.min) {
+      this.minValue = new Date(this.input.min);
+      this.minValue.setHours(0, 0, 0, 0);
+    }
 
     this.onSlotInputChange();
   }
@@ -152,7 +160,7 @@ export class GuxCalendar {
     const firstDayOfMonthIndex = firstOfMonth.getDay();
     const currentDate = new Date(firstOfMonth.getTime());
 
-    // Initialize the first date in the calendar based on the locale week day start's offset
+    // Initialize the first date in the calendar based on the position of the first of the month and the user's locale
     //
     // For instance, if we're using 'en' locale and we're rendering May, 2023, then May 1st resides on a Monday,
     // which means the first date to render in the calendar will be April 30, since Sunday is the first week day we want
@@ -171,9 +179,12 @@ export class GuxCalendar {
           dates: []
         };
       }
+      const disabled =
+        this.minValue && currentDate.getTime() < this.minValue.getTime();
       currentWeek.dates.push({
         date: new Date(currentDate),
-        disabled: currentMonth !== currentDate.getMonth(),
+        disabled,
+        inCurrentMonth: currentMonth === currentDate.getMonth() && !disabled,
         selected:
           this.selectedValue.getTime() === currentDate.getTime() &&
           this.showSelectedValue,
@@ -285,9 +296,11 @@ export class GuxCalendar {
                           aria-selected={day.selected}
                           tabindex={day.selected ? '0' : '-1'}
                           onKeyDown={e => void this.onKeyDown(e)}
+                          aria-disabled={day.disabled}
                           class={{
                             'gux-content-date': true,
                             'gux-disabled': day.disabled,
+                            'gux-current-month': day.inCurrentMonth,
                             'gux-selected': day.selected,
                             'gux-previewed': day.previewed
                           }}
