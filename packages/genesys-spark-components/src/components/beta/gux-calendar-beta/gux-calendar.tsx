@@ -60,6 +60,7 @@ export class GuxCalendar {
       this.selectedValue.setHours(0, 0, 0, 0);
     } else {
       this.selectedValue.setHours(0, 0, 0, 0);
+      // Hide the selected value since the user's input value is empty
       this.showSelectedValue = false;
     }
     // Initialize preview value to be the same as the selected value
@@ -151,8 +152,7 @@ export class GuxCalendar {
     const firstDayOfMonthIndex = firstOfMonth.getDay();
     const currentDate = new Date(firstOfMonth.getTime());
 
-    // Initialize the first date in the calendar based on the locale week day start's offset and where the first of the
-    // month should reside in the calendar.
+    // Initialize the first date in the calendar based on the locale week day start's offset
     //
     // For instance, if we're using 'en' locale and we're rendering May, 2023, then May 1st resides on a Monday,
     // which means the first date to render in the calendar will be April 30, since Sunday is the first week day we want
@@ -163,7 +163,7 @@ export class GuxCalendar {
       );
     }
 
-    // Generate all of the dates in the current month, starting from the first date in the month
+    // Generate all of the dates in the current month
     for (let d = 0; d < this.MONTH_DATE_COUNT + 1; d += 1) {
       if (weekDayIndex % 7 === 0) {
         weeks.push(currentWeek);
