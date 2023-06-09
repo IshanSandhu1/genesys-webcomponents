@@ -18,7 +18,7 @@
     line-height: 16px;
     color: var(--gse-core-white);
     text-align: center;
-    background-color: var(--gse-semantic-primary-main);
+    background-color: var(--gse-ui-calendar-header-background-default);
 
     .gux-header-month-and-year {
       width: 150px;
@@ -88,7 +88,9 @@
 
       &.gux-selected {
         color: var(--gse-core-white);
-        background-color: var(--gse-semantic-primary-main);
+        background-color: var(
+          --gse-ui-calendar-day-date-background-selected-same-month
+        );
         border: none;
         border-radius: 4px;
         outline: none;
@@ -97,13 +99,13 @@
       &:hover {
         color: var(--gse-core-white);
         cursor: pointer;
-        background-color: var(--gse-semantic-primary-main);
+        background-color: var(--gse-ui-calendar-focus);
         border-radius: 4px;
       }
 
       &.gux-previewed {
         margin: -1px;
-        border: 1px solid var(--gse-semantic-primary-main);
+        border: 1px solid var(--gse-ui-calendar-day-date-background-default);
         border-radius: 18px;
       }
     }
