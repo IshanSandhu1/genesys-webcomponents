@@ -22,11 +22,10 @@ export function getWeekdays(
     day.setDate(day.getDate() + 1);
   }
 
-  return shiftArray(days, startDayOfWeek);
+  return rotateArray(days, startDayOfWeek);
 }
 
-function shiftArray(arr: string[], n: number): string[] {
-  const times = n > arr.length ? n % arr.length : n;
-
+function rotateArray(arr: string[], n: number): string[] {
+  const times = n % arr.length;
   return arr.concat(arr.splice(0, times));
 }
