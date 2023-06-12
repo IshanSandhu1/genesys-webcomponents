@@ -139,6 +139,11 @@ export class GuxCalendar {
       case 'Enter':
         event.preventDefault();
         this.onDateClick(this.previewValue);
+
+        // Wait for render before focusing preview date
+        afterNextRenderTimeout(() => {
+          this.focusSelectedDate();
+        });
         break;
       case 'ArrowDown':
         this.setDateAfterArrowKeyPress(event, 7);
@@ -153,9 +158,11 @@ export class GuxCalendar {
         this.setDateAfterArrowKeyPress(event, 1);
         break;
       case 'PageUp':
+        event.preventDefault();
         this.incrementMonth();
         break;
       case 'PageDown':
+        event.preventDefault();
         this.decrementMonth();
         break;
     }
@@ -313,7 +320,7 @@ export class GuxCalendar {
                           onClick={() => this.onDateClick(day.date)}
                           aria-label={this.getDateAriaLabel(day.date)}
                           role="button"
-                          aria-selected={day.selected}
+                          aria-selected={day.selected ? 'true' : 'false'}
                           tabindex={day.selected ? '0' : '-1'}
                           onKeyDown={e => void this.onKeyDown(e)}
                           aria-disabled={day.disabled}
