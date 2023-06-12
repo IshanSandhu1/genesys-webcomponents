@@ -266,6 +266,7 @@ export class GuxCalendar {
         <button
           type="button"
           class="gux-left"
+          aria-label="Previous month"
           onClick={() => this.prevMonthClick()}
         >
           <gux-icon decorative icon-name="chevron-small-left"></gux-icon>
@@ -276,6 +277,7 @@ export class GuxCalendar {
         <button
           type="button"
           class="gux-right"
+          aria-label="Next month"
           onClick={() => this.nextMonthClick()}
         >
           <gux-icon decorative icon-name="chevron-small-right"></gux-icon>
