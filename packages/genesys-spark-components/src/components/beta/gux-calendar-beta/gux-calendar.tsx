@@ -4,11 +4,12 @@ import { IWeekElement, GuxCalendarDayOfWeek } from './gux-calendar.types';
 import { afterNextRenderTimeout } from '@utils/dom/after-next-render';
 import { fromIsoDate } from '@utils/date/iso-dates';
 import {
-  getMonthAndYearDisplay,
+  getMonthYearDisplay,
   getWeekdays,
   getFirstOfMonth
 } from 'services/calendar/calendar';
 import { getDesiredLocale, getStartOfWeek } from '../../../i18n';
+import { DateTimeFormatter } from '../../../i18n/DateTimeFormatter';
 
 @Component({
   styleUrl: 'gux-calendar.scss',
@@ -42,6 +43,7 @@ export class GuxCalendar {
 
   private locale: string = 'en';
   private input: HTMLInputElement;
+  private dateTimeFormatter: DateTimeFormatter;
 
   // Total number of dates that will display for each month in the calendar
   private MONTH_DATE_COUNT: number = 42;
@@ -52,6 +54,7 @@ export class GuxCalendar {
 
   componentWillLoad(): void {
     this.locale = getDesiredLocale(this.root);
+    this.dateTimeFormatter = new DateTimeFormatter(this.locale);
     this.startDayOfWeek = this.startDayOfWeek || getStartOfWeek(this.locale);
     const hasDateSlot = hasSlot(this.root, 'date');
     if (!hasDateSlot) {
@@ -253,6 +256,10 @@ export class GuxCalendar {
     this.incrementMonth();
   }
 
+  private getDateAriaLabel(date: Date): string {
+    return this.dateTimeFormatter.formatDate(new Date(date), 'long');
+  }
+
   private renderHeader(): JSX.Element {
     return (
       <div class="gux-header">
@@ -264,7 +271,7 @@ export class GuxCalendar {
           <gux-icon decorative icon-name="chevron-small-left"></gux-icon>
         </button>
         <span class="gux-header-month-and-year">
-          {getMonthAndYearDisplay(this.previewValue)}
+          {getMonthYearDisplay(this.previewValue)}
         </span>
         <button
           type="button"
@@ -302,7 +309,7 @@ export class GuxCalendar {
                         <div
                           data-date={day.date.getTime()}
                           onClick={() => this.onDateClick(day.date)}
-                          aria-label="Calendar Date"
+                          aria-label={this.getDateAriaLabel(day.date)}
                           role="button"
                           aria-selected={day.selected}
                           tabindex={day.selected ? '0' : '-1'}

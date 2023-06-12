@@ -1,4 +1,4 @@
-export function getMonthAndYearDisplay(date: Date): string {
+export function getMonthYearDisplay(date: Date): string {
   return `${date.toLocaleString('default', {
     month: 'long'
   })} ${date.getFullYear()}`;
