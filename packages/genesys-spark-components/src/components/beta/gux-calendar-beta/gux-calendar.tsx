@@ -1,5 +1,4 @@
 import { Component, Element, h, JSX, State } from '@stencil/core';
-import { hasSlot } from '@utils/dom/has-slot';
 import { IWeekElement, GuxCalendarDayOfWeek } from './gux-calendar.types';
 import { afterNextRenderTimeout } from '@utils/dom/after-next-render';
 import { fromIsoDate } from '@utils/date/iso-dates';
@@ -56,13 +55,12 @@ export class GuxCalendar {
     this.locale = getDesiredLocale(this.root);
     this.dateTimeFormatter = new DateTimeFormatter(this.locale);
     this.startDayOfWeek = this.startDayOfWeek || getStartOfWeek(this.locale);
-    const hasDateSlot = hasSlot(this.root, 'date');
-    if (!hasDateSlot) {
+
+    // Get date input element
+    this.input = this.root.querySelector('input[type="date"]');
+    if (!this.input) {
       return;
     }
-
-    // Get date input slot element
-    this.input = this.root.querySelector('input[slot="date"]');
 
     if (this.input.value) {
       this.selectedValue = new Date(this.input.value);
@@ -75,10 +73,12 @@ export class GuxCalendar {
     // Initialize preview value to be the same as the selected value
     this.previewValue = new Date(this.selectedValue.getTime());
 
+    // Set min value from the "min" input prop
     if (this.input.min) {
       this.minValue = new Date(this.input.min);
       this.minValue.setHours(0, 0, 0, 0);
     }
+    // Set max value from the "max" input prop
     if (this.input.max) {
       this.maxValue = new Date(this.input.max);
       this.maxValue.setHours(0, 0, 0, 0);
@@ -347,7 +347,7 @@ export class GuxCalendar {
   render(): JSX.Element {
     return (
       <div class="gux-calendar-beta">
-        <slot aria-hidden="true" name="date" />
+        <slot aria-hidden="true" />
         {this.renderHeader()}
         {this.renderContent()}
       </div>
