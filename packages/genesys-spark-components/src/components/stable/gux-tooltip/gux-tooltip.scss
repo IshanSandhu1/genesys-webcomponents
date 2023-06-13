@@ -2,19 +2,32 @@
 @import '~genesys-spark-tokens/dist/scss/ui.scss';
 @import '../../../style/zindex.scss';
 
-@import '../../../style/mixins';
+/**
+  * @prop --gse-ui-tooltip-border-default
+  * @prop --gse-ui-tooltip-background-default
+  * @prop --gse-ui-tooltip-border-default
+  * @prop --gse-ui-tooltip-foreground-default
+  * @prop --gse-ui-tooltip-background-dark
+  * @prop --gse-ui-tooltip-background-dark
+  * @prop --gse-ui-tooltip-foreground-inverse
+  * @prop --gse-body-sm-regular-font-family
+  * @prop --gse-body-sm-regular-font-weight
+  * @prop --gse-body-sm-regular-line-height
+  * @prop --gse-body-sm-regular-font-size
+  * @prop --gse-body-sm-regular-letter-spacing
+  * @prop --gse-body-sm-regular-paragraph-spacing
+  * @prop --gse-body-sm-regular-paragraph-indent
+  * @prop --gse-body-sm-regular-text-case
+  * @prop --gse-body-sm-regular-text-decoration
+  * @prop --gux-zindex-tooltip
+  * @prop --gse-elevation-medium-20-x
+  * @prop --gse-elevation-medium-20-y
+  * @prop --gse-elevation-medium-20-blur
+  * @prop --gse-elevation-medium-20-color
+  * @prop --gse-elevation-medium-20-type
+  */
 
-@mixin gse-tooltip-message-text {
-  $gse-body-sm-regular-font-family: Noto Sans;
-  $gse-body-sm-regular-font-weight: 400;
-  $gse-body-sm-regular-line-height: 18px;
-  $gse-body-sm-regular-font-size: 12px;
-  $gse-body-sm-regular-letter-spacing: 0%;
-  $gse-body-sm-regular-paragraph-spacing: 0;
-  $gse-body-sm-regular-paragraph-indent: 0px;
-  $gse-body-sm-regular-text-case: none;
-  $gse-body-sm-regular-text-decoration: none;
-}
+@import '../../../style/mixins';
 
 :host {
   position: fixed;
@@ -22,9 +35,9 @@
   display: none;
   width: max-content;
   max-width: 250px;
-  overflow: visible;
   opacity: 0;
-  //drop shadow to be added to the host. (elevation/medium 20)
+  box-shadow: var(--gse-elevation-medium-20-x) --gse-elevation-medium-20-y
+    --gse-elevation-medium-20-blur var(--gse-elevation-medium-20-color);
 }
 
 :host(.gux-show) {
@@ -46,7 +59,10 @@
   pointer-events: none;
   border: 1px solid var(--gse-ui-tooltip-border-default);
   border-radius: 4px;
-  @include gse-tooltip-message-text;
+  font-family: var(--gse-body-sm-regular-font-family);
+  font-weight: var(--gse-body-sm-regular-font-weight);
+  line-height: var(--gse-body-sm-regular-line-height);
+  font-size: var(--gse-body-sm-regular-font-size);
 
   ::slotted(gux-icon) {
     width: var(--gse-xs);
@@ -58,20 +74,6 @@
     background-color: var(--gse-ui-tooltip-background-default);
     border-color: var(--gse-ui-tooltip-border-default);
     color: var(--gse-ui-tooltip-foreground-default);
-  }
-
-  &.gux-dark {
-    background-color: var(--gse-ui-tooltip-background-dark);
-    border-color: var(--gse-ui-tooltip-background-dark);
-    color: var(--gse-ui-tooltip-foreground-inverse);
-  }
-
-  .gux-arrow {
-    position: absolute;
-    width: 16px;
-    height: 16px;
-    background: red;
-    z-index: 1;
 
     &[data-placement='bottom'],
     &[data-placement='bottom-start'],
@@ -108,6 +110,56 @@
         border-left: 1px solid var(--gse-ui-tooltip-border-default);
       }
     }
+  }
+
+  &.gux-dark {
+    background-color: var(--gse-ui-tooltip-background-dark);
+    border-color: var(--gse-ui-tooltip-background-dark);
+    color: var(--gse-ui-tooltip-foreground-inverse);
+
+    &[data-placement='bottom'],
+    &[data-placement='bottom-start'],
+    &[data-placement='bottom-end'] {
+      .gux-arrow {
+        border-top: 1px solid var(--gse-ui-tooltip-background-dark);
+        border-left: 1px solid var(--gse-ui-tooltip-background-dark);
+      }
+    }
+
+    &[data-placement='top'],
+    &[data-placement='top-start'],
+    &[data-placement='top-end'] {
+      .gux-arrow {
+        border-right: 1px solid var(--gse-ui-tooltip-background-dark);
+        border-bottom: 1px solid var(--gse-ui-tooltip-background-dark);
+      }
+    }
+
+    &[data-placement='left'],
+    &[data-placement='left-start'],
+    &[data-placement='left-end'] {
+      .gux-arrow {
+        border-top: 1px solid var(--gse-ui-tooltip-background-dark);
+        border-right: 1px solid var(--gse-ui-tooltip-background-dark);
+      }
+    }
+
+    &[data-placement='right'],
+    &[data-placement='right-start'],
+    &[data-placement='right-end'] {
+      .gux-arrow {
+        border-bottom: 1px solid var(--gse-ui-tooltip-background-dark);
+        border-left: 1px solid var(--gse-ui-tooltip-background-dark);
+      }
+    }
+  }
+
+  .gux-arrow {
+    position: absolute;
+    width: 13px;
+    height: 13px;
+    border-radius: 4px;
+    background: inherit;
   }
 }
 

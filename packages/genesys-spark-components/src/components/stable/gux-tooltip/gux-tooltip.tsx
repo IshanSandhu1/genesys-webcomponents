@@ -68,6 +68,9 @@ export class GuxTooltip {
   @Prop()
   contrast: GuxTooltipContrast = 'light';
 
+  @Prop()
+  hasAnchor: boolean = false;
+
   @Listen('keydown', { target: 'window', passive: true })
   handleKeyDown(event: KeyboardEvent) {
     if (event.key === 'Escape' && this.isShown) {
@@ -118,13 +121,15 @@ export class GuxTooltip {
         offset(16),
         flip(),
         shift(),
-        arrow({ element: this.arrowElement })
+        this.hasAnchor && arrow({ element: this.arrowElement })
       ]
     }).then(({ x, y, middlewareData, placement }) => {
       Object.assign(this.root.style, {
         left: `${x}px`,
         top: `${y}px`
       });
+      //data-placement needed on the for e2e tests.
+      this.root.setAttribute('data-placement', this.placement);
 
       const side = placement.split('-')[0];
 
@@ -137,8 +142,6 @@ export class GuxTooltip {
 
       if (middlewareData.arrow) {
         const { x, y } = middlewareData.arrow;
-        //data-placement is currently only used for e2e tests.
-        this.root.setAttribute('data-placement', placement);
         Object.assign(this.arrowElement.style, {
           left: x != null ? `${x}px` : '',
           top: y != null ? `${y}px` : '',
@@ -177,6 +180,17 @@ export class GuxTooltip {
       console.error(
         `gux-tooltip: invalid element supplied to 'for': "${this.for}"`
       );
+    }
+  }
+
+  private renderAnchor(): JSX.Element {
+    if (this.hasAnchor) {
+      return (
+        <div
+          ref={(el: HTMLDivElement) => (this.arrowElement = el)}
+          class="gux-arrow"
+        ></div>
+      ) as JSX.Element;
     }
   }
 
@@ -226,16 +240,14 @@ export class GuxTooltip {
     return (
       <Host id={this.id} class={{ 'gux-show': this.isShown }} role="tooltip">
         <div
-          ref={(el: HTMLDivElement) => (this.arrowElement = el)}
-          class="gux-arrow"
-        ></div>
-        <div
           class={{
             'gux-container': true,
             [`gux-${this.contrast}`]: true
           }}
+          data-placement={this.placement}
         >
           <slot />
+          {this.renderAnchor()}
         </div>
       </Host>
     ) as JSX.Element;
