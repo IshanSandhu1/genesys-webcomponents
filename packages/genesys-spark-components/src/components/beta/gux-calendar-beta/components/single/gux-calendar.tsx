@@ -1,14 +1,14 @@
 import { Component, Element, h, JSX, State } from '@stencil/core';
-import { IWeekElement, GuxCalendarDayOfWeek } from './gux-calendar.types';
+import { IWeekElement, GuxCalendarDayOfWeek } from '../../gux-calendar.types';
 import { afterNextRenderTimeout } from '@utils/dom/after-next-render';
 import { fromIsoDate } from '@utils/date/iso-dates';
 import {
   getMonthYearDisplay,
   getWeekdays,
   getFirstOfMonth
-} from 'services/calendar/calendar';
-import { getDesiredLocale, getStartOfWeek } from '../../../i18n';
-import { DateTimeFormatter } from '../../../i18n/DateTimeFormatter';
+} from '../../calendar.service';
+import { getDesiredLocale, getStartOfWeek } from '../../../../../i18n';
+import { DateTimeFormatter } from '../../../../../i18n/DateTimeFormatter';
 
 @Component({
   styleUrl: 'gux-calendar.scss',
