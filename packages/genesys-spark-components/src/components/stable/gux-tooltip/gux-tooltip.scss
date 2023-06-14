@@ -70,6 +70,14 @@
     align-self: center;
   }
 
+  .gux-arrow {
+    position: absolute;
+    width: 13px;
+    height: 13px;
+    border-radius: 4px;
+    background: inherit;
+  }
+
   &.gux-light {
     background-color: var(--gse-ui-tooltip-background-default);
     border-color: var(--gse-ui-tooltip-border-default);
@@ -152,14 +160,6 @@
         border-left: 1px solid var(--gse-ui-tooltip-background-dark);
       }
     }
-  }
-
-  .gux-arrow {
-    position: absolute;
-    width: 13px;
-    height: 13px;
-    border-radius: 4px;
-    background: inherit;
   }
 }
 
