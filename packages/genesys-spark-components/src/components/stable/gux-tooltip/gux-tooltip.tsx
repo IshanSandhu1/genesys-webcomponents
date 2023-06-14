@@ -114,15 +114,21 @@ export class GuxTooltip {
     //This is 13 because this makes the arrow look aligned.
     const arrowLen = 13;
 
-    void computePosition(this.forElement, this.root, {
-      placement: this.placement,
-      strategy: 'fixed',
-      middleware: [
+    let middleware = [offset(16), flip(), shift()];
+
+    if (this.hasAnchor) {
+      middleware = [
         offset(16),
         flip(),
         shift(),
-        this.hasAnchor && arrow({ element: this.arrowElement })
-      ]
+        arrow({ element: this.arrowElement })
+      ];
+    }
+
+    void computePosition(this.forElement, this.root, {
+      placement: this.placement,
+      strategy: 'fixed',
+      middleware: middleware
     }).then(({ x, y, middlewareData, placement }) => {
       Object.assign(this.root.style, {
         left: `${x}px`,
