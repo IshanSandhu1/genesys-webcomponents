@@ -2,8 +2,8 @@ import { newSparkE2EPage } from '../../../../test/e2eTestUtils';
 import {
   goToPrevMonth,
   goToNextMonth,
-  validateMonthYear,
-  validateMonthDayYear,
+  validateHeaderMonth,
+  validateSelecteDate,
   getContentDate
 } from '../services/tests.service';
 
@@ -39,7 +39,7 @@ describe('gux-calendar', () => {
       // await a11yCheck(page);
 
       // Validate that the new month after clicking the right arrow is June, 2023
-      await validateMonthYear(element, 'June 2023');
+      await validateHeaderMonth(element, 'June 2023');
     });
 
     it('calendar decrements by one month after clicking the left arrow button', async () => {
@@ -49,12 +49,12 @@ describe('gux-calendar', () => {
       const element = await page.find('gux-calendar-beta');
 
       // Validate that the current month before clicking the left arrow is May, 2023
-      await validateMonthYear(element, 'May 2023');
+      await validateHeaderMonth(element, 'May 2023');
 
       await goToPrevMonth(element, page);
 
       // Validate that the new month after clicking the left arrow  is April, 2023
-      await validateMonthYear(element, 'April 2023');
+      await validateHeaderMonth(element, 'April 2023');
     });
   });
 
@@ -66,7 +66,7 @@ describe('gux-calendar', () => {
       const element = await page.find('gux-calendar-beta');
 
       // Validate that the selected date on page load is May 19, 2023
-      await validateMonthDayYear(element, 'May 2023', '19');
+      await validateSelecteDate(element, 'May 2023', '19');
     });
 
     it('clicking on a date in the current month causes the date to be selected', async () => {
@@ -81,7 +81,7 @@ describe('gux-calendar', () => {
       await page.waitForChanges();
 
       // Validate that clicking on May 10, 2023 causes it to be selected
-      await validateMonthDayYear(element, 'May 2023', '10');
+      await validateSelecteDate(element, 'May 2023', '10');
     });
 
     it('clicking on a date in the next month causes the date to be selected', async () => {
@@ -96,7 +96,7 @@ describe('gux-calendar', () => {
       await page.waitForChanges();
 
       // Validate that clicking on June 1, 2023 causes it to be selected
-      await validateMonthDayYear(element, 'June 2023', '1');
+      await validateSelecteDate(element, 'June 2023', '1');
     });
 
     it('clicking on a date in the previous month causes the date to be selected', async () => {
@@ -111,7 +111,7 @@ describe('gux-calendar', () => {
       await page.waitForChanges();
 
       // Validate that clicking on April 30, 2023 causes it to be selected
-      await validateMonthDayYear(element, 'April 2023', '30');
+      await validateSelecteDate(element, 'April 2023', '30');
     });
 
     describe('arrow key and page up/down navigation', () => {
@@ -130,7 +130,7 @@ describe('gux-calendar', () => {
         await page.keyboard.press('Enter');
         await page.waitForChanges();
 
-        await validateMonthDayYear(element, 'May 2023', '26');
+        await validateSelecteDate(element, 'May 2023', '26');
       });
 
       it('pressing the up arrow key and then the enter key cause the selected date to decrement by 1 week', async () => {
@@ -148,7 +148,7 @@ describe('gux-calendar', () => {
         await page.keyboard.press('Enter');
         await page.waitForChanges();
 
-        await validateMonthDayYear(element, 'May 2023', '12');
+        await validateSelecteDate(element, 'May 2023', '12');
       });
 
       it('pressing the right arrow key and then the enter key cause the selected date to increment by 1 day', async () => {
@@ -166,7 +166,7 @@ describe('gux-calendar', () => {
         await page.keyboard.press('Enter');
         await page.waitForChanges();
 
-        await validateMonthDayYear(element, 'May 2023', '20');
+        await validateSelecteDate(element, 'May 2023', '20');
       });
 
       it('pressing the left arrow key and then the enter key cause the selected date to decrement by 1 day', async () => {
@@ -184,7 +184,7 @@ describe('gux-calendar', () => {
         await page.keyboard.press('Enter');
         await page.waitForChanges();
 
-        await validateMonthDayYear(element, 'May 2023', '18');
+        await validateSelecteDate(element, 'May 2023', '18');
       });
 
       it('pressing the page down key causes the current month to decrement by 1 month', async () => {
@@ -202,7 +202,7 @@ describe('gux-calendar', () => {
         await page.keyboard.press('Enter');
         await page.waitForChanges();
 
-        await validateMonthYear(element, 'April 2023');
+        await validateHeaderMonth(element, 'April 2023');
       });
 
       it('pressing the page up key causes the current month to increment by 1 month', async () => {
@@ -220,7 +220,7 @@ describe('gux-calendar', () => {
         await page.keyboard.press('Enter');
         await page.waitForChanges();
 
-        await validateMonthYear(element, 'June 2023');
+        await validateHeaderMonth(element, 'June 2023');
       });
     });
 

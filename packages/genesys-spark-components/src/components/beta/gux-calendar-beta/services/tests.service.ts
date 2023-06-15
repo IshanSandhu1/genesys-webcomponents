@@ -1,6 +1,6 @@
 import { E2EElement, E2EPage } from '@stencil/core/testing';
 
-export async function validateMonthDayYear(
+export async function validateSelecteDate(
   element: E2EElement,
   expectedMonthAndYear: string,
   expectedDay: string
@@ -13,7 +13,7 @@ export async function validateMonthDayYear(
   expect(selectedDate.innerHTML).toBe(expectedDay);
 }
 
-export async function validateMonthYear(
+export async function validateHeaderMonth(
   element: E2EElement,
   expectedMonthAndYear: string
 ) {
