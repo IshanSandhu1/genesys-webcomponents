@@ -7,7 +7,7 @@ import {
   getMonthYearDayDisplay,
   getWeekdays,
   getFirstOfMonth
-} from '../../calendar.service';
+} from '../../services/calendar.service';
 import { getDesiredLocale, getStartOfWeek } from '../../../../../i18n';
 
 @Component({

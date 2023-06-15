@@ -1,41 +1,13 @@
 import { newSparkE2EPage } from '../../../../test/e2eTestUtils';
-import { E2EElement } from '@stencil/core/testing';
+import {
+  goToPrevMonth,
+  goToNextMonth,
+  validateMonthYear,
+  validateMonthDayYear,
+  getContentDate
+} from '../services/tests.service';
 
 describe('gux-calendar', () => {
-  const validateMonthDayYear = async (
-    element: E2EElement,
-    expectedMonthAndYear: string,
-    expectedDay: string
-  ) => {
-    const selectedDate = await element.find('pierce/.gux-selected');
-    const currentMonthAndYear = await element.find(
-      'pierce/.gux-header-month-and-year'
-    );
-    expect(currentMonthAndYear.innerHTML).toBe(expectedMonthAndYear);
-    expect(selectedDate.innerHTML).toBe(expectedDay);
-  };
-
-  const validateMonthYear = async (
-    element: E2EElement,
-    expectedMonthAndYear: string
-  ) => {
-    const currentMonthAndYear = await element.find(
-      'pierce/.gux-header-month-and-year'
-    );
-    expect(currentMonthAndYear.innerHTML).toBe(expectedMonthAndYear);
-  };
-
-  const getContentDate = async (
-    element: E2EElement,
-    dateAsMonthDayYear: string
-  ): Promise<E2EElement> => {
-    return await element.find(
-      `pierce/.gux-content-date[data-date="${new Date(
-        dateAsMonthDayYear
-      ).getTime()}"]`
-    );
-  };
-
   const defaultHtml = `
     <gux-calendar-beta>
       <input type="date" value="2023-05-19" min="2023-04-28" max="2023-06-18" />
@@ -63,9 +35,7 @@ describe('gux-calendar', () => {
       );
       expect(currentMonthAndYear.innerHTML).toBe('May 2023');
 
-      const button = await element.find('pierce/.gux-right');
-      await button.click();
-      await page.waitForChanges();
+      await goToNextMonth(element, page);
       // await a11yCheck(page);
 
       // Validate that the new month after clicking the right arrow is June, 2023
@@ -81,9 +51,7 @@ describe('gux-calendar', () => {
       // Validate that the current month before clicking the left arrow is May, 2023
       await validateMonthYear(element, 'May 2023');
 
-      const button = await element.find('pierce/.gux-left');
-      await button.click();
-      await page.waitForChanges();
+      await goToPrevMonth(element, page);
 
       // Validate that the new month after clicking the left arrow  is April, 2023
       await validateMonthYear(element, 'April 2023');
@@ -254,6 +222,31 @@ describe('gux-calendar', () => {
 
         await validateMonthYear(element, 'June 2023');
       });
+    });
+
+    it('setting max prop causes an upper bound range to be implemented correctly', async () => {
+      const page = await newSparkE2EPage({
+        html: defaultHtml
+      });
+      const element = await page.find('gux-calendar-beta');
+
+      // Go to next month
+      await goToNextMonth(element, page);
+
+      const contentDate = await getContentDate(element, 'June 19, 2023');
+      expect(contentDate.className).toContain('gux-disabled');
+    });
+
+    it('setting min prop causes a lower bound range to be implemented correctly', async () => {
+      const page = await newSparkE2EPage({
+        html: defaultHtml
+      });
+      const element = await page.find('gux-calendar-beta');
+
+      await goToPrevMonth(element, page);
+
+      const contentDate = await getContentDate(element, 'April 27, 2023');
+      expect(contentDate.className).toContain('gux-disabled');
     });
   });
 });
