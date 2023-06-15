@@ -3,12 +3,12 @@ import { IWeekElement, GuxCalendarDayOfWeek } from '../../gux-calendar.types';
 import { afterNextRenderTimeout } from '@utils/dom/after-next-render';
 import { fromIsoDate } from '@utils/date/iso-dates';
 import {
-  getMonthYearDisplay,
-  getMonthYearDayDisplay,
   getWeekdays,
-  getFirstOfMonth
+  getFirstOfMonth,
+  getDateAsMonthYear
 } from '../../services/calendar.service';
 import { getDesiredLocale, getStartOfWeek } from '../../../../../i18n';
+import { DateTimeFormatter } from '../../../../../i18n/DateTimeFormatter';
 
 @Component({
   styleUrl: 'gux-calendar.scss',
@@ -50,9 +50,12 @@ export class GuxCalendar {
   // Some locales will have the start day of the week be different than others
   private startDayOfWeek: GuxCalendarDayOfWeek;
 
+  private dateFormatter: DateTimeFormatter;
+
   componentWillLoad(): void {
     this.locale = getDesiredLocale(this.root);
     this.startDayOfWeek = this.startDayOfWeek || getStartOfWeek(this.locale);
+    this.dateFormatter = new DateTimeFormatter(getDesiredLocale(this.root));
 
     // Get date input element
     this.input = this.root.querySelector('input[type="date"]');
@@ -273,7 +276,7 @@ export class GuxCalendar {
           <gux-icon decorative icon-name="chevron-small-left"></gux-icon>
         </button>
         <span class="gux-header-month-and-year">
-          {getMonthYearDisplay(this.previewValue)}
+          {getDateAsMonthYear(this.previewValue, this.locale)}
         </span>
         <button
           type="button"
@@ -312,7 +315,10 @@ export class GuxCalendar {
                         <div
                           data-date={day.date.getTime()}
                           onClick={() => this.onDateClick(day.date)}
-                          aria-label={getMonthYearDayDisplay(day.date)}
+                          aria-label={this.dateFormatter.formatDate(
+                            day.date,
+                            'long'
+                          )}
                           role="button"
                           aria-selected={day.selected ? 'true' : 'false'}
                           tabindex={day.selected ? '0' : '-1'}

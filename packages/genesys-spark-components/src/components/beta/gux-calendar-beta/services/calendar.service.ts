@@ -1,3 +1,5 @@
+import { capitalizeFirstLetter } from '@utils/string/capitalize-first-letter';
+
 export function getMonthYearDisplay(date: Date): string {
   return `${date.toLocaleString('default', {
     month: 'long'
@@ -29,6 +31,12 @@ export function getWeekdays(
   }
 
   return rotateArray(days, startDayOfWeek);
+}
+
+export function getDateAsMonthYear(date: Date, locale: string) {
+  return capitalizeFirstLetter(
+    date.toLocaleDateString(locale, { year: 'numeric', month: 'long' })
+  );
 }
 
 function rotateArray(arr: string[], n: number): string[] {
