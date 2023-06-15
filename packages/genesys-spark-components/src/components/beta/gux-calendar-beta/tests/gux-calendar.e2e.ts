@@ -4,7 +4,7 @@ import {
   goToNextMonth,
   validateHeaderMonth,
   validateSelectedDate,
-  getContentDate
+  getContentDateElement
 } from '../services/tests.service';
 
 describe('gux-calendar', () => {
@@ -30,10 +30,7 @@ describe('gux-calendar', () => {
       const element = await page.find('gux-calendar-beta');
 
       // Validate that the current month before clicking the right arrow is May, 2023
-      const currentMonthAndYear = await element.find(
-        'pierce/.gux-header-month-and-year'
-      );
-      expect(currentMonthAndYear.innerHTML).toBe('May 2023');
+      await validateHeaderMonth(element, 'May 2023');
 
       await goToNextMonth(element, page);
       // await a11yCheck(page);
@@ -76,7 +73,7 @@ describe('gux-calendar', () => {
 
       // Find May 10, 2023 in the calendar and click it so that it will be selected
       const element = await page.find('gux-calendar-beta');
-      const contentDate = await getContentDate(element, 'May 10, 2023');
+      const contentDate = await getContentDateElement(element, 'May 10, 2023');
       await contentDate.click();
       await page.waitForChanges();
 
@@ -91,7 +88,7 @@ describe('gux-calendar', () => {
 
       // Find June 1, 2023 in the calendar and click it so that it will be selected
       const element = await page.find('gux-calendar-beta');
-      const contentDate = await getContentDate(element, 'June 1, 2023');
+      const contentDate = await getContentDateElement(element, 'June 1, 2023');
       await contentDate.click();
       await page.waitForChanges();
 
@@ -106,7 +103,10 @@ describe('gux-calendar', () => {
 
       // Find April 30, 2023 in the calendar and click it so that it will be selected
       const element = await page.find('gux-calendar-beta');
-      const contentDate = await getContentDate(element, 'April 30, 2023');
+      const contentDate = await getContentDateElement(
+        element,
+        'April 30, 2023'
+      );
       await contentDate.click();
       await page.waitForChanges();
 
@@ -233,7 +233,7 @@ describe('gux-calendar', () => {
       // Go to next month
       await goToNextMonth(element, page);
 
-      const contentDate = await getContentDate(element, 'June 19, 2023');
+      const contentDate = await getContentDateElement(element, 'June 19, 2023');
       expect(contentDate.className).toContain('gux-disabled');
     });
 
@@ -245,7 +245,10 @@ describe('gux-calendar', () => {
 
       await goToPrevMonth(element, page);
 
-      const contentDate = await getContentDate(element, 'April 27, 2023');
+      const contentDate = await getContentDateElement(
+        element,
+        'April 27, 2023'
+      );
       expect(contentDate.className).toContain('gux-disabled');
     });
   });
