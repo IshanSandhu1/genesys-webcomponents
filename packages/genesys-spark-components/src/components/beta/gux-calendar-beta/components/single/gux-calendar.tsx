@@ -4,11 +4,11 @@ import { afterNextRenderTimeout } from '@utils/dom/after-next-render';
 import { fromIsoDate } from '@utils/date/iso-dates';
 import {
   getMonthYearDisplay,
+  getMonthYearDayDisplay,
   getWeekdays,
   getFirstOfMonth
 } from '../../calendar.service';
 import { getDesiredLocale, getStartOfWeek } from '../../../../../i18n';
-import { DateTimeFormatter } from '../../../../../i18n/DateTimeFormatter';
 
 @Component({
   styleUrl: 'gux-calendar.scss',
@@ -42,7 +42,6 @@ export class GuxCalendar {
 
   private locale: string = 'en';
   private input: HTMLInputElement;
-  private dateTimeFormatter: DateTimeFormatter;
 
   // Total number of dates that will display for each month in the calendar
   private MONTH_DATE_COUNT: number = 42;
@@ -53,7 +52,6 @@ export class GuxCalendar {
 
   componentWillLoad(): void {
     this.locale = getDesiredLocale(this.root);
-    this.dateTimeFormatter = new DateTimeFormatter(this.locale);
     this.startDayOfWeek = this.startDayOfWeek || getStartOfWeek(this.locale);
 
     // Get date input element
@@ -263,10 +261,6 @@ export class GuxCalendar {
     this.incrementMonth();
   }
 
-  private getDateAriaLabel(date: Date): string {
-    return this.dateTimeFormatter.formatDate(new Date(date), 'long');
-  }
-
   private renderHeader(): JSX.Element {
     return (
       <div class="gux-header">
@@ -317,8 +311,9 @@ export class GuxCalendar {
                       (
                         <div
                           data-date={day.date.getTime()}
+                          data-test={getMonthYearDayDisplay(day.date)}
                           onClick={() => this.onDateClick(day.date)}
-                          aria-label={this.getDateAriaLabel(day.date)}
+                          aria-label={getMonthYearDayDisplay(day.date)}
                           role="button"
                           aria-selected={day.selected ? 'true' : 'false'}
                           tabindex={day.selected ? '0' : '-1'}

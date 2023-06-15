@@ -4,6 +4,12 @@ export function getMonthYearDisplay(date: Date): string {
   })} ${date.getFullYear()}`;
 }
 
+export function getMonthYearDayDisplay(date: Date): string {
+  return `${date.toLocaleString('default', {
+    month: 'long'
+  })} ${date.getDate()}, ${date.getFullYear()}`;
+}
+
 export function getFirstOfMonth(date: Date): Date {
   return new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0);
 }

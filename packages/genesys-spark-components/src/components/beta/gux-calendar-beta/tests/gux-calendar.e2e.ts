@@ -94,7 +94,7 @@ describe('gux-calendar', () => {
       // Find May 10, 2023 in the calendar and click it so that it will be selected
       const element = await page.find('gux-calendar-beta');
       const contentDate = await element.find(
-        'pierce/[aria-label="May 10, 2023"]'
+        'pierce/[data-test="May 10, 2023"]'
       );
       await contentDate.click();
       await page.waitForChanges();
@@ -111,7 +111,7 @@ describe('gux-calendar', () => {
       // Find June 1, 2023 in the calendar and click it so that it will be selected
       const element = await page.find('gux-calendar-beta');
       const contentDate = await element.find(
-        'pierce/[aria-label="June 1, 2023"]'
+        'pierce/[data-test="June 1, 2023"]'
       );
       await contentDate.click();
       await page.waitForChanges();
@@ -128,7 +128,7 @@ describe('gux-calendar', () => {
       // Find April 30, 2023 in the calendar and click it so that it will be selected
       const element = await page.find('gux-calendar-beta');
       const contentDate = await element.find(
-        'pierce/[aria-label="April 30, 2023"]'
+        'pierce/[data-test="April 30, 2023"]'
       );
       await contentDate.click();
       await page.waitForChanges();
@@ -137,7 +137,7 @@ describe('gux-calendar', () => {
       await validateMonthDayYear(element, 'April 2023', '30');
     });
 
-    describe('arrow key navigation', () => {
+    describe('arrow key and page up/down navigation', () => {
       it('pressing the down arrow key and then the enter key cause the selected date to increment by 1 week', async () => {
         const page = await newSparkE2EPage({
           html: defaultHtml
@@ -210,7 +210,41 @@ describe('gux-calendar', () => {
         await validateMonthDayYear(element, 'May 2023', '18');
       });
 
-      // TODO: write unit tests for page up/down keys
+      it('pressing the page down key causes the current month to decrement by 1 month', async () => {
+        const page = await newSparkE2EPage({
+          html: defaultHtml
+        });
+        const element = await page.find('gux-calendar-beta');
+
+        // First click the selected date to get focus on the calendar
+        const selectedDate = await element.find('pierce/.gux-selected');
+        await selectedDate.click();
+
+        // Press the left arrow key and then the enter key
+        await page.keyboard.press('PageDown');
+        await page.keyboard.press('Enter');
+        await page.waitForChanges();
+
+        await validateMonthYear(element, 'April 2023');
+      });
+
+      it('pressing the page up key causes the current month to increment by 1 month', async () => {
+        const page = await newSparkE2EPage({
+          html: defaultHtml
+        });
+        const element = await page.find('gux-calendar-beta');
+
+        // First click the selected date to get focus on the calendar
+        const selectedDate = await element.find('pierce/.gux-selected');
+        await selectedDate.click();
+
+        // Press the left arrow key and then the enter key
+        await page.keyboard.press('PageUp');
+        await page.keyboard.press('Enter');
+        await page.waitForChanges();
+
+        await validateMonthYear(element, 'June 2023');
+      });
     });
   });
 });
