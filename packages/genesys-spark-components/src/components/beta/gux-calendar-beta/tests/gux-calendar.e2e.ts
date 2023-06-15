@@ -1,10 +1,11 @@
 import { newSparkE2EPage } from '../../../../test/e2eTestUtils';
+import { E2EElement } from '@stencil/core/testing';
 
 describe('gux-calendar', () => {
   const validateMonthDayYear = async (
-    element,
-    expectedMonthAndYear,
-    expectedDay
+    element: E2EElement,
+    expectedMonthAndYear: string,
+    expectedDay: string
   ) => {
     const selectedDate = await element.find('pierce/.gux-selected');
     const currentMonthAndYear = await element.find(
@@ -14,11 +15,25 @@ describe('gux-calendar', () => {
     expect(selectedDate.innerHTML).toBe(expectedDay);
   };
 
-  const validateMonthYear = async (element, expectedMonthAndYear) => {
+  const validateMonthYear = async (
+    element: E2EElement,
+    expectedMonthAndYear: string
+  ) => {
     const currentMonthAndYear = await element.find(
       'pierce/.gux-header-month-and-year'
     );
     expect(currentMonthAndYear.innerHTML).toBe(expectedMonthAndYear);
+  };
+
+  const getContentDate = async (
+    element: E2EElement,
+    dateAsMonthDayYear: string
+  ): Promise<E2EElement> => {
+    return await element.find(
+      `pierce/.gux-content-date[data-date="${new Date(
+        dateAsMonthDayYear
+      ).getTime()}"]`
+    );
   };
 
   const defaultHtml = `
@@ -93,9 +108,7 @@ describe('gux-calendar', () => {
 
       // Find May 10, 2023 in the calendar and click it so that it will be selected
       const element = await page.find('gux-calendar-beta');
-      const contentDate = await element.find(
-        'pierce/[data-test="May 10, 2023"]'
-      );
+      const contentDate = await getContentDate(element, 'May 10, 2023');
       await contentDate.click();
       await page.waitForChanges();
 
@@ -110,9 +123,7 @@ describe('gux-calendar', () => {
 
       // Find June 1, 2023 in the calendar and click it so that it will be selected
       const element = await page.find('gux-calendar-beta');
-      const contentDate = await element.find(
-        'pierce/[data-test="June 1, 2023"]'
-      );
+      const contentDate = await getContentDate(element, 'June 1, 2023');
       await contentDate.click();
       await page.waitForChanges();
 
@@ -127,9 +138,7 @@ describe('gux-calendar', () => {
 
       // Find April 30, 2023 in the calendar and click it so that it will be selected
       const element = await page.find('gux-calendar-beta');
-      const contentDate = await element.find(
-        'pierce/[data-test="April 30, 2023"]'
-      );
+      const contentDate = await getContentDate(element, 'April 30, 2023');
       await contentDate.click();
       await page.waitForChanges();
 

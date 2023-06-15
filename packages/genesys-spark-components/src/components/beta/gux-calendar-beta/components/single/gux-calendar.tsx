@@ -311,7 +311,6 @@ export class GuxCalendar {
                       (
                         <div
                           data-date={day.date.getTime()}
-                          data-test={getMonthYearDayDisplay(day.date)}
                           onClick={() => this.onDateClick(day.date)}
                           aria-label={getMonthYearDayDisplay(day.date)}
                           role="button"
