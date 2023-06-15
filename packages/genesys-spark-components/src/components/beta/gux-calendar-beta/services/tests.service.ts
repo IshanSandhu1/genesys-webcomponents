@@ -23,7 +23,7 @@ export async function validateHeaderMonth(
   expect(currentMonthAndYear.innerHTML).toBe(expectedMonthAndYear);
 }
 
-export async function getContentDate(
+export async function getContentDateElement(
   element: E2EElement,
   dateAsMonthDayYear: string
 ): Promise<E2EElement> {
