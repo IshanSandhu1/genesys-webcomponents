@@ -1,6 +1,6 @@
 import { E2EElement, E2EPage } from '@stencil/core/testing';
 
-export async function validateSelecteDate(
+export async function validateSelectedDate(
   element: E2EElement,
   expectedMonthAndYear: string,
   expectedDay: string
