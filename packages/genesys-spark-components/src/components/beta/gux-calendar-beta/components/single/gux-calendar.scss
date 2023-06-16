@@ -19,6 +19,9 @@
     color: var(--gse-ui-calendar-header-foreground-default);
     text-align: center;
     background-color: var(--gse-ui-calendar-header-background-default);
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    justify-content: space-between;
 
     .gux-header-month-and-year {
       width: 150px;
