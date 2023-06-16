@@ -81,7 +81,7 @@ export class GuxCalendar {
     this.dateFormatter = new DateTimeFormatter(getDesiredLocale(this.root));
     this.i18n = await buildI18nForComponent(this.root, translationResources);
 
-    // Get date input element
+    // Get slotted input date element
     this.slot = this.root.querySelector('input[type="date"]');
     if (!this.slot) {
       return;
