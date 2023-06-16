@@ -83,7 +83,7 @@ export class GuxCalendar {
 
     // Get date input element
     this.slot = this.root.querySelector('input[type="date"]');
-    if (!this.input) {
+    if (!this.slot) {
       return;
     }
 
