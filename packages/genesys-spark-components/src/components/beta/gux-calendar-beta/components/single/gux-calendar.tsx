@@ -19,6 +19,7 @@ import { getDesiredLocale, getStartOfWeek } from '../../../../../i18n';
 import { DateTimeFormatter } from '../../../../../i18n/DateTimeFormatter';
 import { buildI18nForComponent, GetI18nValue } from '../../../../../i18n';
 import translationResources from '../../i18n/en.json';
+import { logError } from '../../../../../utils/error/log-error';
 
 @Component({
   styleUrl: 'gux-calendar.scss',
@@ -84,7 +85,10 @@ export class GuxCalendar {
     // Get slotted input date element
     this.slot = this.root.querySelector('input[type="date"]');
     if (!this.slot) {
-      return;
+      logError(
+        this.root.tagName.toLowerCase(),
+        `This component requires an input element that matches the following selector: input[type="date"]`
+      );
     }
 
     if (this.slot.value) {
