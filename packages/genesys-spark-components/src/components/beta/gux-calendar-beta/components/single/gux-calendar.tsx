@@ -1,4 +1,12 @@
-import { Component, Element, h, JSX, State } from '@stencil/core';
+import {
+  Component,
+  Element,
+  h,
+  JSX,
+  State,
+  Event,
+  EventEmitter
+} from '@stencil/core';
 import { IWeekElement, GuxCalendarDayOfWeek } from '../../gux-calendar.types';
 import { afterNextRenderTimeout } from '@utils/dom/after-next-render';
 import { fromIsoDate } from '@utils/date/iso-dates';
@@ -9,6 +17,8 @@ import {
 } from '../../services/calendar.service';
 import { getDesiredLocale, getStartOfWeek } from '../../../../../i18n';
 import { DateTimeFormatter } from '../../../../../i18n/DateTimeFormatter';
+import { buildI18nForComponent, GetI18nValue } from '../../../../../i18n';
+import translationResources from '../../i18n/en.json';
 
 @Component({
   styleUrl: 'gux-calendar.scss',
@@ -41,7 +51,8 @@ export class GuxCalendar {
   private showSelectedValue: boolean = true;
 
   private locale: string = 'en';
-  private input: HTMLInputElement;
+
+  private i18n: GetI18nValue;
 
   // Total number of dates that will display for each month in the calendar
   private MONTH_DATE_COUNT: number = 42;
@@ -52,19 +63,32 @@ export class GuxCalendar {
 
   private dateFormatter: DateTimeFormatter;
 
-  componentWillLoad(): void {
+  private slot: HTMLInputElement;
+
+  /**
+   * Triggered when user selects a date
+   */
+  @Event()
+  input: EventEmitter<string>;
+
+  emitInput() {
+    this.input.emit(this.slot.value);
+  }
+
+  async componentWillLoad(): Promise<void> {
     this.locale = getDesiredLocale(this.root);
     this.startDayOfWeek = this.startDayOfWeek || getStartOfWeek(this.locale);
     this.dateFormatter = new DateTimeFormatter(getDesiredLocale(this.root));
+    this.i18n = await buildI18nForComponent(this.root, translationResources);
 
     // Get date input element
-    this.input = this.root.querySelector('input[type="date"]');
+    this.slot = this.root.querySelector('input[type="date"]');
     if (!this.input) {
       return;
     }
 
-    if (this.input.value) {
-      this.selectedValue = new Date(this.input.value);
+    if (this.slot.value) {
+      this.selectedValue = new Date(this.slot.value);
       this.selectedValue.setHours(0, 0, 0, 0);
     } else {
       this.selectedValue.setHours(0, 0, 0, 0);
@@ -75,13 +99,13 @@ export class GuxCalendar {
     this.previewValue = new Date(this.selectedValue.getTime());
 
     // Set min value from the "min" input prop
-    if (this.input.min) {
-      this.minValue = new Date(this.input.min);
+    if (this.slot.min) {
+      this.minValue = new Date(this.slot.min);
       this.minValue.setHours(0, 0, 0, 0);
     }
     // Set max value from the "max" input prop
-    if (this.input.max) {
-      this.maxValue = new Date(this.input.max);
+    if (this.slot.max) {
+      this.maxValue = new Date(this.slot.max);
       this.maxValue.setHours(0, 0, 0, 0);
     }
 
@@ -92,8 +116,8 @@ export class GuxCalendar {
    *  Set the selected calendar value when the slot input value changes
    */
   private onSlotInputChange(): void {
-    this.input.addEventListener('input', () => {
-      const value = fromIsoDate(this.input.value);
+    this.slot.addEventListener('input', () => {
+      const value = fromIsoDate(this.slot.value);
       value.setHours(0, 0, 0, 0);
       this.selectedValue = value;
     });
@@ -104,10 +128,11 @@ export class GuxCalendar {
     this.selectedValue = new Date(date.getTime());
     this.previewValue = new Date(date.getTime());
     this.setSlotInputValue(date);
+    this.emitInput();
   }
 
   private setSlotInputValue(date: Date) {
-    this.input.value = date.toISOString().substring(0, 10);
+    this.slot.value = date.toISOString().substring(0, 10);
   }
 
   private setDateAfterArrowKeyPress(
@@ -160,11 +185,11 @@ export class GuxCalendar {
         break;
       case 'PageUp':
         event.preventDefault();
-        this.incrementMonth();
+        this.changeMonth(1);
         break;
       case 'PageDown':
         event.preventDefault();
-        this.decrementMonth();
+        this.changeMonth(-1);
         break;
     }
   }
@@ -237,14 +262,6 @@ export class GuxCalendar {
     });
   }
 
-  private decrementMonth(): void {
-    this.changeMonth(-1);
-  }
-
-  private incrementMonth(): void {
-    this.changeMonth(1);
-  }
-
   private focusSelectedDate(): void {
     const target: HTMLTableCellElement = this.root.shadowRoot.querySelector(
       `.gux-content-date[data-date="${this.selectedValue.getTime()}"]`
@@ -256,12 +273,12 @@ export class GuxCalendar {
 
   private prevMonthClick(): void {
     this.showPreviewValue = false;
-    this.decrementMonth();
+    this.changeMonth(-1);
   }
 
   private nextMonthClick(): void {
     this.showPreviewValue = false;
-    this.incrementMonth();
+    this.changeMonth(1);
   }
 
   private renderHeader(): JSX.Element {
@@ -270,7 +287,7 @@ export class GuxCalendar {
         <button
           type="button"
           class="gux-left"
-          aria-label="Previous month"
+          aria-label={this.i18n('previousMonth')}
           onClick={() => this.prevMonthClick()}
         >
           <gux-icon decorative icon-name="chevron-small-left"></gux-icon>
@@ -281,7 +298,7 @@ export class GuxCalendar {
         <button
           type="button"
           class="gux-right"
-          aria-label="Next month"
+          aria-label={this.i18n('nextMonth')}
           onClick={() => this.nextMonthClick()}
         >
           <gux-icon decorative icon-name="chevron-small-right"></gux-icon>
@@ -297,7 +314,7 @@ export class GuxCalendar {
           {getWeekdays(this.locale, this.startDayOfWeek).map(
             day =>
               (
-                <div class="gux-week-day" aria-label="Week day">
+                <div class="gux-week-day" aria-label={this.i18n('weekDay')}>
                   {day}
                 </div>
               ) as JSX.Element
@@ -323,7 +340,7 @@ export class GuxCalendar {
                           aria-selected={day.selected ? 'true' : 'false'}
                           tabindex={day.selected ? '0' : '-1'}
                           onKeyDown={e => void this.onKeyDown(e)}
-                          aria-disabled={day.disabled}
+                          aria-disabled={day.disabled ? 'true' : 'false'}
                           class={{
                             'gux-content-date': true,
                             'gux-disabled': day.disabled,

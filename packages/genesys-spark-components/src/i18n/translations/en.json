@@ -16,6 +16,11 @@
     "red-bold": "badge with label: {label}, color: red bold",
     "inherit": "badge with label: {label}"
   },
+  "gux-calendar-beta": {
+    "weekDay": "Week day",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month"
+  },
   "gux-column-manager-item": {
     "activateReordering": "Activate reordering mode for {columnName} column"
   },
