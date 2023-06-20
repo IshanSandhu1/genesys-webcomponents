@@ -100,7 +100,9 @@
       &:hover {
         color: var(--gse-ui-calendar-day-date-foreground-selected);
         cursor: pointer;
-        background-color: var(--gse-ui-calendar-focus);
+        background-color: var(
+          --gse-ui-calendar-day-date-background-selected-hover
+        );
         border-radius: 4px;
       }
 
