@@ -1,6 +1,6 @@
 import { newSparkE2EPage } from '../../../../test/e2eTestUtils';
 import {
-  goToPrevMonth,
+  goToPreviousMonth,
   goToNextMonth,
   validateHeaderMonth,
   validateSelectedDate,
@@ -48,7 +48,7 @@ describe('gux-calendar', () => {
       // Validate that the current month before clicking the left arrow is May, 2023
       await validateHeaderMonth(element, 'May 2023');
 
-      await goToPrevMonth(element, page);
+      await goToPreviousMonth(element, page);
 
       // Validate that the new month after clicking the left arrow  is April, 2023
       await validateHeaderMonth(element, 'April 2023');
@@ -243,13 +243,28 @@ describe('gux-calendar', () => {
       });
       const element = await page.find('gux-calendar-beta');
 
-      await goToPrevMonth(element, page);
+      await goToPreviousMonth(element, page);
 
       const contentDate = await getContentDateElement(
         element,
         'April 27, 2023'
       );
       expect(contentDate.className).toContain('gux-disabled');
+    });
+
+    it('tab index is set to 0 for selected date and -1 for non-selected date', async () => {
+      const page = await newSparkE2EPage({
+        html: defaultHtml
+      });
+      const element = await page.find('gux-calendar-beta');
+
+      const selectedDate = await getContentDateElement(element, 'May 19, 2023');
+      const nonSelectedDate = await getContentDateElement(
+        element,
+        'May 20, 2023'
+      );
+      expect(selectedDate.tabIndex).toBe(0);
+      expect(nonSelectedDate.tabIndex).toBe(-1);
     });
   });
 });

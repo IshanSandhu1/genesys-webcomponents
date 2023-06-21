@@ -6,13 +6,13 @@ exports[`gux-calendar renders 1`] = `
     <div class="gux-calendar-beta">
       <slot aria-hidden="true"></slot>
       <div class="gux-header">
-        <button aria-label="Previous month" class="gux-left" type="button">
+        <button aria-label="Previous month" class="gux-left" tabindex="-1" type="button">
           <gux-icon decorative="" icon-name="chevron-small-left"></gux-icon>
         </button>
         <span class="gux-header-month-and-year">
           May 2023
         </span>
-        <button aria-label="Next month" class="gux-right" type="button">
+        <button aria-label="Next month" class="gux-right" tabindex="-1" type="button">
           <gux-icon decorative="" icon-name="chevron-small-right"></gux-icon>
         </button>
       </div>

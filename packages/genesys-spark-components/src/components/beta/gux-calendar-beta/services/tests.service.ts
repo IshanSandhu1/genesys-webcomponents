@@ -34,7 +34,7 @@ export async function getContentDateElement(
   );
 }
 
-export async function goToPrevMonth(
+export async function goToPreviousMonth(
   element: E2EElement,
   page: E2EPage
 ): Promise<void> {
