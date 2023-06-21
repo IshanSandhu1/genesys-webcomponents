@@ -8,6 +8,9 @@ export interface IDateElement {
   selected: boolean;
   previewed: boolean;
   inCurrentMonth: boolean;
+  tabIndex: string;
+  ariaSelected: string;
+  ariaDisabled: string;
 }
 
 export type GuxCalendarDayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;

@@ -232,17 +232,20 @@ export class GuxCalendar {
         (this.minValue && currentDate.getTime() <= this.minValue.getTime()) ||
         (this.maxValue && currentDate.getTime() > this.maxValue.getTime());
 
+      const selected = this.selectedValue.getTime() === currentDate.getTime();
+
       currentWeek.dates.push({
         date: new Date(currentDate),
         disabled,
         inCurrentMonth: currentMonth === currentDate.getMonth() && !disabled,
-        selected:
-          this.selectedValue.getTime() === currentDate.getTime() &&
-          this.showSelectedValue,
+        tabIndex: selected ? '0' : '-1',
+        selected: selected && this.showSelectedValue,
         previewed:
           this.showPreviewValue &&
           this.previewValue?.getTime() === currentDate.getTime() &&
-          this.previewValue?.getTime() !== this.selectedValue.getTime() // Do not show preview value for date if it's already selected
+          this.previewValue?.getTime() !== this.selectedValue.getTime(), // Do not show preview value for date if it's already selected
+        ariaSelected: selected ? 'true' : 'false',
+        ariaDisabled: disabled ? 'true' : 'false'
       });
       weekDayIndex += 1;
       currentDate.setDate(currentDate.getDate() + 1);
@@ -343,10 +346,10 @@ export class GuxCalendar {
                             'long'
                           )}
                           role="button"
-                          aria-selected={day.selected ? 'true' : 'false'}
-                          tabindex={day.selected ? '0' : '-1'}
+                          aria-selected={day.ariaSelected}
+                          tabindex={day.tabIndex}
                           onKeyDown={e => void this.onKeyDown(e)}
-                          aria-disabled={day.disabled ? 'true' : 'false'}
+                          aria-disabled={day.ariaDisabled}
                           class={{
                             'gux-content-date': true,
                             'gux-disabled': day.disabled,
