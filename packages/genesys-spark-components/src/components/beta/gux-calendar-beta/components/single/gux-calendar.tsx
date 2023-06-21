@@ -290,6 +290,7 @@ export class GuxCalendar {
       <div class="gux-header">
         <button
           type="button"
+          tabindex="-1"
           class="gux-left"
           aria-label={this.i18n('previousMonth')}
           onClick={() => this.prevMonthClick()}
@@ -302,6 +303,7 @@ export class GuxCalendar {
         <button
           type="button"
           class="gux-right"
+          tabindex="-1"
           aria-label={this.i18n('nextMonth')}
           onClick={() => this.nextMonthClick()}
         >
