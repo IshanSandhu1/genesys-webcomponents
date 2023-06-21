@@ -86,7 +86,7 @@ export class GuxCalendar {
     this.slot = this.root.querySelector('input[type="date"]');
     if (!this.slot) {
       logError(
-        this.root.tagName.toLowerCase(),
+        this.slot.tagName.toLowerCase(),
         `This component requires an input element that matches the following selector: input[type="date"]`
       );
     }
