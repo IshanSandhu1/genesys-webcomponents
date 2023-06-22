@@ -1,13 +1,4 @@
-import {
-  Component,
-  Element,
-  h,
-  JSX,
-  State,
-  Event,
-  Listen,
-  EventEmitter
-} from '@stencil/core';
+import { Component, Element, h, JSX, State } from '@stencil/core';
 import { IWeekElement, GuxCalendarDayOfWeek } from '../../gux-calendar.types';
 import { fromIsoDate } from '@utils/date/iso-dates';
 import {
@@ -246,7 +237,6 @@ export class GuxCalendar {
       <div class="gux-header">
         <button
           type="button"
-          tabindex="-1"
           class="gux-left"
           aria-label={this.i18n('previousMonth')}
           onClick={() => this.changeMonth(-1)}
@@ -259,7 +249,6 @@ export class GuxCalendar {
         <button
           type="button"
           class="gux-right"
-          tabindex="-1"
           aria-label={this.i18n('nextMonth')}
           onClick={() => this.changeMonth(1)}
         >
