@@ -6,7 +6,6 @@ export interface IDateElement {
   date: Date;
   disabled: boolean;
   selected: boolean;
-  focused: boolean;
   inCurrentMonth: boolean;
   tabIndex: string;
   ariaSelected: string;

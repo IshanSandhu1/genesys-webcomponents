@@ -9,7 +9,7 @@
 
 ### `focusFocusedDate() => Promise<void>`
 
-Focus the preview date
+Focus the focused date
 
 #### Returns
 

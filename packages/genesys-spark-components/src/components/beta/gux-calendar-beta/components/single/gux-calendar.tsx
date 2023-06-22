@@ -298,8 +298,7 @@ export class GuxCalendar {
                             'gux-content-date': true,
                             'gux-disabled': day.disabled,
                             'gux-current-month': day.inCurrentMonth,
-                            'gux-selected': day.selected,
-                            'gux-previewed': day.focused
+                            'gux-selected': day.selected
                           }}
                         >
                           {day.date.getDate()}
