@@ -56,14 +56,6 @@ export class GuxCalendar {
     this.dateFormatter = new DateTimeFormatter(this.locale);
     this.i18n = await buildI18nForComponent(this.root, translationResources);
 
-    // Get slotted input date element
-    if (!this.slottedInput) {
-      logError(
-        this.root.tagName.toLowerCase(),
-        `This component requires an input element that matches the following selector: input[type="date"]`
-      );
-    }
-
     if (this.slottedInput.value) {
       this.focusedValue = fromIsoDate(this.slottedInput.value);
     }
@@ -188,7 +180,9 @@ export class GuxCalendar {
       weekDayIndex += 1;
       currentDate.setDate(currentDate.getDate() + 1);
     }
+
     this.hideFocusedValue = false;
+
     return weeks as IWeekElement[];
   }
 
