@@ -8,7 +8,6 @@ import {
   EventEmitter
 } from '@stencil/core';
 import { IWeekElement, GuxCalendarDayOfWeek } from '../../gux-calendar.types';
-import { afterNextRenderTimeout } from '@utils/dom/after-next-render';
 import { fromIsoDate } from '@utils/date/iso-dates';
 import {
   getWeekdays,
@@ -30,26 +29,17 @@ export class GuxCalendar {
   @Element()
   root: HTMLElement;
 
-  @State()
-  private selectedValue: Date = new Date();
+  // @State()
+  // private selectedValue: Date = new Date();
 
   @State()
-  private previewValue: Date;
+  private focusedValue: Date;
 
   @State()
   private minValue: Date;
 
   @State()
   private maxValue: Date;
-
-  @State()
-  // Preview value will not be visible when the user clicks on the next or previous month arrows in the header,
-  // otherwise we will show the preview value as a circular border around the date
-  private showPreviewValue: boolean = false;
-
-  @State()
-  // Selected value will not be visible if the user's date input value is empty
-  private showSelectedValue: boolean = true;
 
   private locale: string = 'en';
 
@@ -66,6 +56,9 @@ export class GuxCalendar {
 
   private slot: HTMLInputElement;
 
+  @State()
+  private hideFocusedValue: boolean;
+
   /**
    * Triggered when user selects a date
    */
@@ -79,7 +72,7 @@ export class GuxCalendar {
   async componentWillLoad(): Promise<void> {
     this.locale = getDesiredLocale(this.root);
     this.startDayOfWeek = this.startDayOfWeek || getStartOfWeek(this.locale);
-    this.dateFormatter = new DateTimeFormatter(getDesiredLocale(this.root));
+    this.dateFormatter = new DateTimeFormatter(this.locale);
     this.i18n = await buildI18nForComponent(this.root, translationResources);
 
     // Get slotted input date element
@@ -92,15 +85,8 @@ export class GuxCalendar {
     }
 
     if (this.slot.value) {
-      this.selectedValue = new Date(this.slot.value);
-      this.selectedValue.setHours(0, 0, 0, 0);
-    } else {
-      this.selectedValue.setHours(0, 0, 0, 0);
-      // Hide the selected value since the user's input value is empty
-      this.showSelectedValue = false;
+      this.focusedValue = fromIsoDate(this.slot.value);
     }
-    // Initialize preview value to be the same as the selected value
-    this.previewValue = new Date(this.selectedValue.getTime());
 
     // Set min value from the "min" input prop
     if (this.slot.min) {
@@ -123,14 +109,11 @@ export class GuxCalendar {
     this.slot.addEventListener('input', () => {
       const value = fromIsoDate(this.slot.value);
       value.setHours(0, 0, 0, 0);
-      this.selectedValue = value;
     });
   }
 
   private onDateClick(date: Date): void {
-    this.showSelectedValue = true;
-    this.selectedValue = new Date(date.getTime());
-    this.previewValue = new Date(date.getTime());
+    this.focusedValue = new Date(date.getTime());
     this.setSlotInputValue(date);
     this.emitInput();
   }
@@ -144,36 +127,25 @@ export class GuxCalendar {
     newDayValue: number
   ): void {
     event.preventDefault();
-    this.previewValue = new Date(
-      this.previewValue.getFullYear(),
-      this.previewValue.getMonth(),
-      this.previewValue.getDate() + newDayValue,
+    const currentFocusedValue = this.getFocusedValue();
+    this.focusedValue = new Date(
+      currentFocusedValue.getFullYear(),
+      currentFocusedValue.getMonth(),
+      currentFocusedValue.getDate() + newDayValue,
       0,
       0,
       0
     );
-
-    // Wait for render before focusing preview date
-    afterNextRenderTimeout(() => {
-      this.focusSelectedDate();
-    });
   }
 
   private onKeyDown(event: KeyboardEvent): void {
-    this.showPreviewValue = true;
-
     switch (event.key) {
       case ' ':
-        this.showPreviewValue = false;
         break;
       case 'Enter':
         event.preventDefault();
-        this.onDateClick(this.previewValue);
-
-        // Wait for render before focusing preview date
-        afterNextRenderTimeout(() => {
-          this.focusSelectedDate();
-        });
+        this.onDateClick(this.getFocusedValue());
+        this.focusSelectedDate();
         break;
       case 'ArrowDown':
         this.setDateAfterArrowKeyPress(event, 7);
@@ -199,13 +171,14 @@ export class GuxCalendar {
   }
 
   private getMonthDays(): IWeekElement[] {
-    const firstOfMonth = getFirstOfMonth(this.previewValue);
+    const firstOfMonth = getFirstOfMonth(this.getFocusedValue());
     const weeks = [];
     let currentWeek = { dates: [] };
     let weekDayIndex = 0;
     const currentMonth = firstOfMonth.getMonth();
     const firstDayOfMonthIndex = firstOfMonth.getDay();
     const currentDate = new Date(firstOfMonth.getTime());
+    const selectedValue = this.getSelectedValue();
 
     // Initialize the first date in the calendar based on the position of the first of the month and the user's locale
     //
@@ -220,6 +193,10 @@ export class GuxCalendar {
 
     // Generate all of the dates in the current month
     for (let d = 0; d < this.MONTH_DATE_COUNT + 1; d += 1) {
+      const shouldSelectDate =
+        selectedValue.getTime() === currentDate.getTime() &&
+        this.focusedValue !== undefined;
+
       if (weekDayIndex % 7 === 0) {
         weeks.push(currentWeek);
         currentWeek = {
@@ -232,60 +209,64 @@ export class GuxCalendar {
         (this.minValue && currentDate.getTime() <= this.minValue.getTime()) ||
         (this.maxValue && currentDate.getTime() > this.maxValue.getTime());
 
-      const selected = this.selectedValue.getTime() === currentDate.getTime();
-
       currentWeek.dates.push({
         date: new Date(currentDate),
         disabled,
         inCurrentMonth: currentMonth === currentDate.getMonth() && !disabled,
-        tabIndex: selected ? '0' : '-1',
-        selected: selected && this.showSelectedValue,
-        previewed:
-          this.showPreviewValue &&
-          this.previewValue?.getTime() === currentDate.getTime() &&
-          this.previewValue?.getTime() !== this.selectedValue.getTime(), // Do not show preview value for date if it's already selected
-        ariaSelected: selected ? 'true' : 'false',
+        tabIndex: shouldSelectDate ? '0' : '-1',
+        selected: shouldSelectDate && selectedValue,
+        focused:
+          !this.hideFocusedValue &&
+          this.getFocusedValue()?.getTime() === currentDate.getTime() &&
+          this.getFocusedValue()?.getTime() !== selectedValue.getTime(), // Do not show preview value for date if it's already selected
+        ariaSelected: shouldSelectDate ? 'true' : 'false',
         ariaDisabled: disabled ? 'true' : 'false'
       });
       weekDayIndex += 1;
       currentDate.setDate(currentDate.getDate() + 1);
     }
+    this.hideFocusedValue = false;
     return weeks as IWeekElement[];
   }
 
+  private getFocusedValue(): Date {
+    if (this.focusedValue) {
+      return this.focusedValue;
+    }
+    return this.getSelectedValue();
+  }
+
   private changeMonth(newMonthValue: number): void {
-    this.previewValue = new Date(
-      this.previewValue.getFullYear(),
-      this.previewValue.getMonth() + newMonthValue,
+    this.hideFocusedValue = true;
+    const currentFocusedValue = this.getFocusedValue();
+    this.focusedValue = new Date(
+      currentFocusedValue.getFullYear(),
+      currentFocusedValue.getMonth() + newMonthValue,
       1,
       0,
       0,
       0
     );
+  }
 
-    // Wait for render before focusing preview date
-    afterNextRenderTimeout(() => {
-      this.focusSelectedDate();
-    });
+  private getSelectedValue(): Date {
+    if (this.slot.value) {
+      const value = fromIsoDate(this.slot.value);
+      return value;
+    }
+
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+    return now;
   }
 
   private focusSelectedDate(): void {
     const target: HTMLTableCellElement = this.root.shadowRoot.querySelector(
-      `.gux-content-date[data-date="${this.selectedValue.getTime()}"]`
+      `.gux-content-date[data-date="${this.getSelectedValue().getTime()}"]`
     );
     if (target) {
       target.focus();
     }
-  }
-
-  private prevMonthClick(): void {
-    this.showPreviewValue = false;
-    this.changeMonth(-1);
-  }
-
-  private nextMonthClick(): void {
-    this.showPreviewValue = false;
-    this.changeMonth(1);
   }
 
   private renderHeader(): JSX.Element {
@@ -296,19 +277,19 @@ export class GuxCalendar {
           tabindex="-1"
           class="gux-left"
           aria-label={this.i18n('previousMonth')}
-          onClick={() => this.prevMonthClick()}
+          onClick={() => this.changeMonth(-1)}
         >
           <gux-icon decorative icon-name="chevron-small-left"></gux-icon>
         </button>
         <span class="gux-header-month-and-year">
-          {getDateAsMonthYear(this.previewValue, this.locale)}
+          {getDateAsMonthYear(this.getFocusedValue(), this.locale)}
         </span>
         <button
           type="button"
           class="gux-right"
           tabindex="-1"
           aria-label={this.i18n('nextMonth')}
-          onClick={() => this.nextMonthClick()}
+          onClick={() => this.changeMonth(1)}
         >
           <gux-icon decorative icon-name="chevron-small-right"></gux-icon>
         </button>
@@ -355,7 +336,7 @@ export class GuxCalendar {
                             'gux-disabled': day.disabled,
                             'gux-current-month': day.inCurrentMonth,
                             'gux-selected': day.selected,
-                            'gux-previewed': day.previewed
+                            'gux-previewed': day.focused
                           }}
                         >
                           {day.date.getDate()}
