@@ -5,6 +5,7 @@ import {
   JSX,
   State,
   Event,
+  Listen,
   EventEmitter
 } from '@stencil/core';
 import { IWeekElement, GuxCalendarDayOfWeek } from '../../gux-calendar.types';
@@ -29,9 +30,6 @@ export class GuxCalendar {
   @Element()
   root: HTMLElement;
 
-  // @State()
-  // private selectedValue: Date = new Date();
-
   @State()
   private focusedValue: Date;
 
@@ -54,19 +52,11 @@ export class GuxCalendar {
 
   private dateFormatter: DateTimeFormatter;
 
-  private slot: HTMLInputElement;
-
   @State()
   private hideFocusedValue: boolean;
 
-  /**
-   * Triggered when user selects a date
-   */
-  @Event()
-  input: EventEmitter<string>;
-
-  emitInput() {
-    this.input.emit(this.slot.value);
+  private get slottedInput(): HTMLInputElement {
+    return this.root.querySelector('input[type="date"]');
   }
 
   async componentWillLoad(): Promise<void> {
@@ -76,50 +66,32 @@ export class GuxCalendar {
     this.i18n = await buildI18nForComponent(this.root, translationResources);
 
     // Get slotted input date element
-    this.slot = this.root.querySelector('input[type="date"]');
-    if (!this.slot) {
+    if (!this.slottedInput) {
       logError(
-        this.slot.tagName.toLowerCase(),
+        this.root.tagName.toLowerCase(),
         `This component requires an input element that matches the following selector: input[type="date"]`
       );
     }
 
-    if (this.slot.value) {
-      this.focusedValue = fromIsoDate(this.slot.value);
+    if (this.slottedInput.value) {
+      this.focusedValue = fromIsoDate(this.slottedInput.value);
     }
 
     // Set min value from the "min" input prop
-    if (this.slot.min) {
-      this.minValue = new Date(this.slot.min);
+    if (this.slottedInput.min) {
+      this.minValue = new Date(this.slottedInput.min);
       this.minValue.setHours(0, 0, 0, 0);
     }
     // Set max value from the "max" input prop
-    if (this.slot.max) {
-      this.maxValue = new Date(this.slot.max);
+    if (this.slottedInput.max) {
+      this.maxValue = new Date(this.slottedInput.max);
       this.maxValue.setHours(0, 0, 0, 0);
     }
-
-    this.onSlotInputChange();
-  }
-
-  /**
-   *  Set the selected calendar value when the slot input value changes
-   */
-  private onSlotInputChange(): void {
-    this.slot.addEventListener('input', () => {
-      const value = fromIsoDate(this.slot.value);
-      value.setHours(0, 0, 0, 0);
-    });
   }
 
   private onDateClick(date: Date): void {
     this.focusedValue = new Date(date.getTime());
-    this.setSlotInputValue(date);
-    this.emitInput();
-  }
-
-  private setSlotInputValue(date: Date) {
-    this.slot.value = date.toISOString().substring(0, 10);
+    this.slottedInput.value = date.toISOString().substring(0, 10);
   }
 
   private setDateAfterArrowKeyPress(
@@ -250,8 +222,8 @@ export class GuxCalendar {
   }
 
   private getSelectedValue(): Date {
-    if (this.slot.value) {
-      const value = fromIsoDate(this.slot.value);
+    if (this.slottedInput.value) {
+      const value = fromIsoDate(this.slottedInput.value);
       return value;
     }
 

@@ -5,13 +5,6 @@
 <!-- Auto Generated Below -->
 
 
-## Events
-
-| Event   | Description                        | Type                  |
-| ------- | ---------------------------------- | --------------------- |
-| `input` | Triggered when user selects a date | `CustomEvent<string>` |
-
-
 ## Dependencies
 
 ### Depends on
