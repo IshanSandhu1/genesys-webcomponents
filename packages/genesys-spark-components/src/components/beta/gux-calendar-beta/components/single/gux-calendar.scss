@@ -111,10 +111,8 @@
         border-radius: 4px;
       }
 
-      &.gux-previewed {
-        margin: -1px;
-        border: 1px solid var(--gse-ui-calendar-focus);
-        border-radius: 18px;
+      &:focus-visible {
+        outline: 2px solid var(--gse-ui-shared-focus-ring);
       }
     }
   }

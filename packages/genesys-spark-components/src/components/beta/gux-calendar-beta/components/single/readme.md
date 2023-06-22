@@ -5,6 +5,19 @@
 <!-- Auto Generated Below -->
 
 
+## Methods
+
+### `focusPreviewDate() => Promise<void>`
+
+Focus the preview date
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+
 ## Dependencies
 
 ### Depends on
