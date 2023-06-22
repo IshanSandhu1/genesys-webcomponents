@@ -93,9 +93,8 @@ export class GuxCalendar {
   }
 
   /**
-   * Focus the preview date
+   * Focus the focused date
    */
-  // eslint-disable-next-line @typescript-eslint/require-await
   @Method()
   focusFocusedDate() {
     const target: HTMLTableCellElement = this.root.shadowRoot.querySelector(
