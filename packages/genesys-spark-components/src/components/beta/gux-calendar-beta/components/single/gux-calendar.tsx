@@ -88,7 +88,7 @@ export class GuxCalendar {
       0
     );
     afterNextRenderTimeout(() => {
-      void this.focusPreviewDate();
+      void this.focusFocusedDate();
     });
   }
 
@@ -97,7 +97,7 @@ export class GuxCalendar {
    */
   // eslint-disable-next-line @typescript-eslint/require-await
   @Method()
-  focusPreviewDate() {
+  focusFocusedDate() {
     const target: HTMLTableCellElement = this.root.shadowRoot.querySelector(
       `.gux-content-date[data-date="${this.focusedValue.getTime()}"]`
     );
@@ -114,7 +114,7 @@ export class GuxCalendar {
         event.preventDefault();
         this.onDateClick(this.getFocusedValue());
         afterNextRenderTimeout(() => {
-          void this.focusPreviewDate();
+          void this.focusFocusedDate();
         });
         break;
       case 'ArrowDown':
@@ -133,14 +133,14 @@ export class GuxCalendar {
         event.preventDefault();
         this.changeMonth(1);
         afterNextRenderTimeout(() => {
-          void this.focusPreviewDate();
+          void this.focusFocusedDate();
         });
         break;
       case 'PageDown':
         event.preventDefault();
         this.changeMonth(-1);
         afterNextRenderTimeout(() => {
-          void this.focusPreviewDate();
+          void this.focusFocusedDate();
         });
         break;
     }

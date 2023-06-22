@@ -7,7 +7,7 @@
 
 ## Methods
 
-### `focusPreviewDate() => Promise<void>`
+### `focusFocusedDate() => Promise<void>`
 
 Focus the preview date
 
