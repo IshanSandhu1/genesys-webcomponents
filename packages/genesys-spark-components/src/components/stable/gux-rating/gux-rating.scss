@@ -27,14 +27,8 @@
     height: 16px;
     color: var(--gse-ui-star-rating-icon-selected);
 
-    &:focus-visible {
-      outline: 2px solid var(--gse-ui-star-rating-focus-ring);
-      outline-offset: 1px;
-      box-shadow: 0 0 0 1px var(--gse-ui-star-rating-focus-ring);
+    &:hover:not(.gux-disabled) {
+      color: var(--gse-ui-star-rating-icon-hover);
     }
-  }
-
-  &:hover:not(.gux-disabled) {
-    color: var(--gse-ui-star-rating-icon-hover);
   }
 }
