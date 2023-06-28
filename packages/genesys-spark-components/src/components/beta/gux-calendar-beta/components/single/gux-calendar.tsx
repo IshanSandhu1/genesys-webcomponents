@@ -7,7 +7,6 @@ import {
   getDateAsMonthYear
 } from '../../services/calendar.service';
 import { getDesiredLocale, getStartOfWeek } from '../../../../../i18n';
-import { DateTimeFormatter } from '../../../../../i18n/DateTimeFormatter';
 import { buildI18nForComponent, GetI18nValue } from '../../../../../i18n';
 import translationResources from '../../i18n/en.json';
 import { afterNextRenderTimeout } from '@utils/dom/after-next-render';
@@ -41,8 +40,6 @@ export class GuxCalendar {
   // Some locales will have the start day of the week be different than others
   private startDayOfWeek: GuxCalendarDayOfWeek;
 
-  private dateFormatter: DateTimeFormatter;
-
   private get slottedInput(): HTMLInputElement {
     return this.root.querySelector('input[type="date"]');
   }
@@ -50,7 +47,6 @@ export class GuxCalendar {
   async componentWillLoad(): Promise<void> {
     this.locale = getDesiredLocale(this.root);
     this.startDayOfWeek = this.startDayOfWeek || getStartOfWeek(this.locale);
-    this.dateFormatter = new DateTimeFormatter(this.locale);
     this.i18n = await buildI18nForComponent(this.root, translationResources);
 
     if (this.slottedInput.value) {
@@ -172,7 +168,7 @@ export class GuxCalendar {
         selectedValue.getTime() === currentDate.getTime() &&
         this.focusedValue !== undefined;
 
-      if (weekDayIndex % 7 === 0) {
+      if (weekDayIndex > 0 && weekDayIndex % 7 === 0) {
         weeks.push(currentWeek);
         currentWeek = {
           dates: []
@@ -265,12 +261,7 @@ export class GuxCalendar {
       <div>
         <div class="gux-week-days">
           {getWeekdays(this.locale, this.startDayOfWeek).map(
-            day =>
-              (
-                <div class="gux-week-day" aria-label={this.i18n('weekDay')}>
-                  {day}
-                </div>
-              ) as JSX.Element
+            day => (<div class="gux-week-day">{day}</div>) as JSX.Element
           )}
         </div>
 
@@ -285,10 +276,6 @@ export class GuxCalendar {
                         <div
                           data-date={day.date.getTime()}
                           onClick={() => this.onDateClick(day.date)}
-                          aria-label={this.dateFormatter.formatDate(
-                            day.date,
-                            'long'
-                          )}
                           role="button"
                           aria-selected={day.ariaSelected}
                           tabindex={day.tabIndex}
@@ -316,7 +303,7 @@ export class GuxCalendar {
   render(): JSX.Element {
     return (
       <div class="gux-calendar-beta">
-        <slot aria-hidden="true" />
+        <slot />
         {this.renderHeader()}
         {this.renderContent()}
       </div>
