@@ -17,7 +17,6 @@
     "inherit": "badge with label: {label}"
   },
   "gux-calendar-beta": {
-    "weekDay": "Week day",
     "previousMonth": "Previous month",
     "nextMonth": "Next month"
   },
