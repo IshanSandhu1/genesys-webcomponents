@@ -1,0 +1,17 @@
+@import (reference) '../../../../style/color.less';
+@import (reference) '../../../../style/spacing.less';
+
+@gux-off-tab-fill: @gux-grey-40;
+
+// Style
+:host(.gux-tab-sorting) {
+  :focus-within {
+    margin-bottom: 4px;
+  }
+}
+
+:host(.gux-selected) {
+  padding-bottom: 0;
+  background-color: @gux-grey-100;
+  border-bottom: 2px solid @gux-blue-60;
+}

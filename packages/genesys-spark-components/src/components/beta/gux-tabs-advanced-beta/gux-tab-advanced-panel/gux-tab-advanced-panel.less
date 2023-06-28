@@ -1,0 +1,11 @@
+@import (reference) '../../../../style/focus.less';
+
+div[role='tabpanel'] {
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    .gux-focus-ring();
+  }
+}
