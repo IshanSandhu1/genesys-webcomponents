@@ -10,6 +10,7 @@ import { getDesiredLocale, getStartOfWeek } from '../../../../../i18n';
 import { buildI18nForComponent, GetI18nValue } from '../../../../../i18n';
 import translationResources from '../../i18n/en.json';
 import { afterNextRenderTimeout } from '@utils/dom/after-next-render';
+import { logError } from '@utils/error/log-error';
 
 @Component({
   styleUrl: 'gux-calendar.scss',
@@ -45,6 +46,13 @@ export class GuxCalendar {
   }
 
   async componentWillLoad(): Promise<void> {
+    if (!this.slottedInput) {
+      logError(
+        'gux-calendar',
+        `For accessibility reasons the slotted input should be defined.`
+      );
+    }
+
     this.locale = getDesiredLocale(this.root);
     this.startDayOfWeek = this.startDayOfWeek || getStartOfWeek(this.locale);
     this.i18n = await buildI18nForComponent(this.root, translationResources);
@@ -84,15 +92,14 @@ export class GuxCalendar {
       0
     );
     afterNextRenderTimeout(() => {
-      void this.focusFocusedDate();
+      this.focusDate();
     });
   }
 
   /**
    * Focus the focused date
    */
-  @Method()
-  focusFocusedDate() {
+  private focusDate() {
     const target: HTMLTableCellElement = this.root.shadowRoot.querySelector(
       `.gux-content-date[data-date="${this.focusedValue.getTime()}"]`
     );
@@ -109,7 +116,7 @@ export class GuxCalendar {
         event.preventDefault();
         this.onDateClick(this.getFocusedValue());
         afterNextRenderTimeout(() => {
-          void this.focusFocusedDate();
+          this.focusDate();
         });
         break;
       case 'ArrowDown':
@@ -128,14 +135,14 @@ export class GuxCalendar {
         event.preventDefault();
         this.changeMonth(1);
         afterNextRenderTimeout(() => {
-          void this.focusFocusedDate();
+          this.focusDate();
         });
         break;
       case 'PageDown':
         event.preventDefault();
         this.changeMonth(-1);
         afterNextRenderTimeout(() => {
-          void this.focusFocusedDate();
+          this.focusDate();
         });
         break;
     }
