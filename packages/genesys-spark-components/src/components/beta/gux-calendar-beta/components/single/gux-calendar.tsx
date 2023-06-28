@@ -1,4 +1,4 @@
-import { Component, Element, h, JSX, State, Method } from '@stencil/core';
+import { Component, Element, h, JSX, State } from '@stencil/core';
 import { IWeekElement, GuxCalendarDayOfWeek } from '../../gux-calendar.types';
 import { fromIsoDate } from '@utils/date/iso-dates';
 import {
@@ -48,8 +48,8 @@ export class GuxCalendar {
   async componentWillLoad(): Promise<void> {
     if (!this.slottedInput) {
       logError(
-        'gux-calendar',
-        `For accessibility reasons the slotted input should be defined.`
+        this.root,
+        'For accessibility reasons the slotted input should be defined.'
       );
     }
 

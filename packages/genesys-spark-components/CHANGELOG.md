@@ -2,6 +2,61 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.89.4](https://github.com/MyPureCloud/genesys-webcomponents/compare/v3.89.3...v3.89.4) (2023-06-28)
+
+### [3.89.3](https://github.com/MyPureCloud/genesys-webcomponents/compare/v3.89.2...v3.89.3) (2023-06-24)
+
+
+### Bug Fixes
+
+* **popover:** infinite loop in find-element-by-id ([f442139](https://github.com/MyPureCloud/genesys-webcomponents/commit/f442139caccf8f8e7d9f262d6516a69259509595))
+
+### [3.89.2](https://github.com/MyPureCloud/genesys-webcomponents/compare/v3.89.1...v3.89.2) (2023-06-23)
+
+
+### Bug Fixes
+
+* **table-toolbar:** add pointer events none to disabled elements ([b6649f8](https://github.com/MyPureCloud/genesys-webcomponents/commit/b6649f8cabae710fc675927446e030bc1eabaf24))
+
+### [3.89.1](https://github.com/MyPureCloud/genesys-webcomponents/compare/v3.89.0...v3.89.1) (2023-06-22)
+
+## [3.89.0](https://github.com/MyPureCloud/genesys-webcomponents/compare/v3.88.1...v3.89.0) (2023-06-21)
+
+
+### Features
+
+* **pagination-beta:** addition of new pagination features ([cb43b05](https://github.com/MyPureCloud/genesys-webcomponents/commit/cb43b051aa833c517f95d795949592c4fd5b3122))
+
+### [3.88.1](https://github.com/MyPureCloud/genesys-webcomponents/compare/v3.88.0...v3.88.1) (2023-06-19)
+
+
+### Bug Fixes
+
+* **css:** import tokens from node_modules ([d8f8cb3](https://github.com/MyPureCloud/genesys-webcomponents/commit/d8f8cb36b01a4fb5ae8346d58db00f674d17c076))
+* **on-resize-observer:** isolate each components observer ([c24ec69](https://github.com/MyPureCloud/genesys-webcomponents/commit/c24ec6991ed8e52d0c36466aec9bea095d639dbc))
+* **pr-comment:** addressed PR comment ([33f0a55](https://github.com/MyPureCloud/genesys-webcomponents/commit/33f0a55ffd3b2f21fd6c0972cfe7478c2920613c))
+
+## [3.88.0](https://github.com/MyPureCloud/genesys-webcomponents/compare/v3.87.0...v3.88.0) (2023-06-16)
+
+
+### Features
+
+* **icon:** add new icons ([ce61979](https://github.com/MyPureCloud/genesys-webcomponents/commit/ce619798922f7f351fb38ef545030bfc99b60c8b))
+* **icon:** additional requested icons ([c809184](https://github.com/MyPureCloud/genesys-webcomponents/commit/c8091840c0bab1ae144264d52100cb7215d72bf3))
+* **icon:** icons requested for agent workspace ([574b2d4](https://github.com/MyPureCloud/genesys-webcomponents/commit/574b2d496c307974a75cbe176b1d752fd5fe9a0f))
+* **language:** added Ukrainian language file ready for translation service ([64316c3](https://github.com/MyPureCloud/genesys-webcomponents/commit/64316c3249afc415cb42522b84152417962a209a))
+
+
+### Bug Fixes
+
+* **accordion:** addressed accessibility issues ([f327dde](https://github.com/MyPureCloud/genesys-webcomponents/commit/f327dde9e30612eff5aaad80ab008acebd101aec))
+* **calendar:** removed spurious failing test temporarily ([e213f85](https://github.com/MyPureCloud/genesys-webcomponents/commit/e213f85c89e77386f561ddfdb6e6ef46f6b20b98))
+* **css:** fixed tokens css import inot components ([d6e4566](https://github.com/MyPureCloud/genesys-webcomponents/commit/d6e4566e348aa6860e18f779e51ea614ba95c2d5))
+* **icon:** don't await cached icon fetch promises ([0eb49e2](https://github.com/MyPureCloud/genesys-webcomponents/commit/0eb49e24a23fd5757b2509a509c71f0f91baa856))
+* **pr-comment:** addressed PR comment ([cf3d334](https://github.com/MyPureCloud/genesys-webcomponents/commit/cf3d334acc1f16c5b1113702b7dfe2992098eeba))
+* **pr-comment:** addressed PR comments ([a20e5a3](https://github.com/MyPureCloud/genesys-webcomponents/commit/a20e5a3b903dd7b8550c7b49f488451648225d41))
+* **versions-file:** removed duplicates from generated version file ([184583a](https://github.com/MyPureCloud/genesys-webcomponents/commit/184583a3ffbd0fd12dd9697a469cf9b215e39a9b))
+
 ## [3.87.0](https://github.com/MyPureCloud/genesys-webcomponents/compare/v3.86.2...v3.87.0) (2023-05-30)
 
 
