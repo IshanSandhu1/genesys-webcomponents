@@ -72,6 +72,7 @@ export class GuxContentSearch {
     this.value = '';
     this.resetInputSlottedElement();
     this.emitCurrentMatchChanged();
+    this.inputSlottedElement.focus();
   }
 
   async componentWillLoad() {
@@ -139,7 +140,7 @@ export class GuxContentSearch {
               type="button"
               class="gux-previous-button"
               title={this.i18n('navigatePreviousBtn')}
-              aria-label={this.i18n('navigatePreviousBtn')}
+              aria-hidden="true"
               onClick={() => this.previousClick()}
               disabled={disableNavigationPanel}
             >
@@ -149,7 +150,7 @@ export class GuxContentSearch {
               type="button"
               class="gux-next-button"
               title={this.i18n('navigateNextBtn')}
-              aria-label={this.i18n('navigateNextBtn')}
+              aria-hidden="true"
               onClick={() => this.nextClick()}
               disabled={disableNavigationPanel}
             >

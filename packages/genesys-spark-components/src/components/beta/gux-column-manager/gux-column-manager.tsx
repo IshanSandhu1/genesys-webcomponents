@@ -8,7 +8,8 @@ import {
   forceUpdate,
   State,
   Listen,
-  Watch
+  Watch,
+  Host
 } from '@stencil/core';
 
 import { buildI18nForComponent, GetI18nValue } from '../../../i18n';
@@ -205,41 +206,46 @@ export class GuxColumnManager {
 
   render(): JSX.Element {
     return (
-      <div class="gux-container">
-        <div class="gux-search">
-          <gux-content-search
-            match-count={this.highlightResults.matchCount}
-            current-match={this.highlightResults.currentMatch}
-            onGuxcurrentmatchchanged={event =>
-              this.onGuxCurrentMatchChanged(event)
-            }
-          >
-            <input
-              type="text"
-              placeholder={this.i18n('search')}
-              onInput={() => this.onSearchInput()}
-              ref={el => (this.searchElement = el)}
-            />
-          </gux-content-search>
+      <Host>
+        <div class="gux-container">
+          <div class="gux-screenreader-search-resuls" aria-live="polite">
+            {`${this.highlightResults.matchCount} search results`}
+          </div>
+          <div class="gux-search">
+            <gux-content-search
+              match-count={this.highlightResults.matchCount}
+              current-match={this.highlightResults.currentMatch}
+              onGuxcurrentmatchchanged={event =>
+                this.onGuxCurrentMatchChanged(event)
+              }
+            >
+              <input
+                type="search"
+                placeholder={this.i18n('search')}
+                onInput={() => this.onSearchInput()}
+                ref={el => (this.searchElement = el)}
+              />
+            </gux-content-search>
+          </div>
+          <div class="gux-select">
+            <gux-form-field-checkbox>
+              <input
+                slot="input"
+                type="checkbox"
+                ref={el => (this.mainCheckboxElement = el)}
+                onChange={() => this.onMainCheckboxChange()}
+              />
+              <label slot="label">{this.renderSelectedColumnCount()}</label>
+            </gux-form-field-checkbox>
+          </div>
+          <div class="gux-list" onChange={() => this.onListChange()}>
+            <slot onSlotchange={() => this.onSlotChange()}></slot>
+          </div>
+          <gux-announce-beta
+            ref={el => (this.announceElement = el)}
+          ></gux-announce-beta>
         </div>
-        <div class="gux-select">
-          <gux-form-field-checkbox>
-            <input
-              slot="input"
-              type="checkbox"
-              ref={el => (this.mainCheckboxElement = el)}
-              onChange={() => this.onMainCheckboxChange()}
-            />
-            <label slot="label">{this.renderSelectedColumnCount()}</label>
-          </gux-form-field-checkbox>
-        </div>
-        <div class="gux-list" onChange={() => this.onListChange()}>
-          <slot onSlotchange={() => this.onSlotChange()}></slot>
-        </div>
-        <gux-announce-beta
-          ref={el => (this.announceElement = el)}
-        ></gux-announce-beta>
-      </div>
+      </Host>
     ) as JSX.Element;
   }
 }
