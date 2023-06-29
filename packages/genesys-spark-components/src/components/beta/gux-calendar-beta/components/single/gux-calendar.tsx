@@ -49,7 +49,7 @@ export class GuxCalendar {
     if (!this.slottedInput) {
       logError(
         this.root,
-        'For accessibility reasons the slotted input should be defined.'
+        'You must slot a date input element like so: input[type="date"].'
       );
     }
 
