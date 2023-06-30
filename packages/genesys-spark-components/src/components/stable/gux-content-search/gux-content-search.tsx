@@ -136,26 +136,20 @@ export class GuxContentSearch {
             >
               {this.matchCountResult()}
             </span>
-            <button
-              type="button"
+            <div
               class="gux-previous-button"
               title={this.i18n('navigatePreviousBtn')}
-              aria-hidden="true"
               onClick={() => this.previousClick()}
-              disabled={disableNavigationPanel}
             >
               <gux-icon decorative icon-name="arrow-solid-up"></gux-icon>
-            </button>
-            <button
-              type="button"
+            </div>
+            <div
               class="gux-next-button"
               title={this.i18n('navigateNextBtn')}
-              aria-hidden="true"
               onClick={() => this.nextClick()}
-              disabled={disableNavigationPanel}
             >
               <gux-icon decorative icon-name="arrow-solid-down"></gux-icon>
-            </button>
+            </div>
           </div>
           <button
             type="button"
