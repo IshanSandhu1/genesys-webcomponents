@@ -138,6 +138,7 @@ export class GuxContentSearch {
             </span>
             <div
               class="gux-previous-button"
+              role="button"
               title={this.i18n('navigatePreviousBtn')}
               onClick={() => this.previousClick()}
             >
@@ -145,6 +146,7 @@ export class GuxContentSearch {
             </div>
             <div
               class="gux-next-button"
+              role="button"
               title={this.i18n('navigateNextBtn')}
               onClick={() => this.nextClick()}
             >
