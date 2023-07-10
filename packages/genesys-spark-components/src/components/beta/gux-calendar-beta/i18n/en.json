@@ -1,4 +1,4 @@
 {
-  "previousMonth": "Previous month",
-  "nextMonth": "Next month"
+  "previousMonth": "Previous month: {localizedPreviousMonthAndYear}",
+  "nextMonth": "Next month: {localizedPreviousMonthAndYear}"
 }

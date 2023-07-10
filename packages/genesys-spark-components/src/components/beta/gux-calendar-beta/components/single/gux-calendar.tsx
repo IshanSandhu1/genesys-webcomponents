@@ -4,7 +4,8 @@ import { fromIsoDate } from '@utils/date/iso-dates';
 import {
   getWeekdays,
   getFirstOfMonth,
-  getDateAsMonthYear
+  getDateAsMonthYear,
+  getMonthYearDayDisplay
 } from '../../services/calendar.service';
 import { getDesiredLocale, getStartOfWeek } from '../../../../../i18n';
 import { buildI18nForComponent, GetI18nValue } from '../../../../../i18n';
@@ -133,14 +134,14 @@ export class GuxCalendar {
         break;
       case 'PageUp':
         event.preventDefault();
-        this.changeMonth(1);
+        this.setNewFocusedMonth(1);
         afterNextRenderTimeout(() => {
           this.focusDate();
         });
         break;
       case 'PageDown':
         event.preventDefault();
-        this.changeMonth(-1);
+        this.setNewFocusedMonth(-1);
         afterNextRenderTimeout(() => {
           this.focusDate();
         });
@@ -215,8 +216,8 @@ export class GuxCalendar {
     return this.getSelectedValue();
   }
 
-  private changeMonth(newMonthValue: number): void {
-    this.focusedValue = new Date(
+  private changeMonth(newMonthValue: number): Date {
+    return new Date(
       this.getFocusedValue().getFullYear(),
       this.getFocusedValue().getMonth() + newMonthValue,
       1,
@@ -224,6 +225,10 @@ export class GuxCalendar {
       0,
       0
     );
+  }
+
+  private setNewFocusedMonth(newMonthValue: number): void {
+    this.focusedValue = this.changeMonth(newMonthValue);
   }
 
   private getSelectedValue(): Date {
@@ -243,8 +248,13 @@ export class GuxCalendar {
         <button
           type="button"
           class="gux-left"
-          aria-label={this.i18n('previousMonth')}
-          onClick={() => this.changeMonth(-1)}
+          aria-label={this.i18n('previousMonth', {
+            localizedPreviousMonthAndYear: getDateAsMonthYear(
+              this.changeMonth(-1),
+              this.locale
+            )
+          })}
+          onClick={() => this.setNewFocusedMonth(-1)}
         >
           <gux-icon decorative icon-name="chevron-small-left"></gux-icon>
         </button>
@@ -254,8 +264,13 @@ export class GuxCalendar {
         <button
           type="button"
           class="gux-right"
-          aria-label={this.i18n('nextMonth')}
-          onClick={() => this.changeMonth(1)}
+          aria-label={this.i18n('nextMonth', {
+            localizedPreviousMonthAndYear: getDateAsMonthYear(
+              this.changeMonth(1),
+              this.locale
+            )
+          })}
+          onClick={() => this.setNewFocusedMonth(1)}
         >
           <gux-icon decorative icon-name="chevron-small-right"></gux-icon>
         </button>
@@ -295,7 +310,10 @@ export class GuxCalendar {
                             'gux-selected': day.selected
                           }}
                         >
-                          {day.date.getDate()}
+                          <span aria-hidden="true">{day.date.getDate()}</span>
+                          <span class="gux-sr-only">
+                            {getMonthYearDayDisplay(day.date)}
+                          </span>
                         </div>
                       ) as JSX.Element
                   )}
