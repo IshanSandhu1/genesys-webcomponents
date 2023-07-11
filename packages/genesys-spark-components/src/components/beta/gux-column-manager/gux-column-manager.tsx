@@ -55,8 +55,7 @@ export class GuxColumnManager {
   @State()
   highlightResults: InternalHighlightResults = {
     matchCount: 0,
-    currentMatch: 0,
-    items: []
+    currentMatch: 0
   };
 
   @State()
