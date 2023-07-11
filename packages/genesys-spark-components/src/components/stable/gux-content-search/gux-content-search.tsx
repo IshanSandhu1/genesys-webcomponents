@@ -125,33 +125,35 @@ export class GuxContentSearch {
               'gux-navigation-panel': true,
               'gux-navigation-disabled': disableNavigationPanel
             }}
-            title={this.matchCountResult()}
           >
             <span
               class={{
                 'gux-navigation-result': true,
                 'gux-navigation-result-disabled': disableNavigationPanel
               }}
-              aria-label={this.matchCountResult()}
             >
               {this.matchCountResult()}
             </span>
-            <div
+            <button
+              type="button"
               class="gux-previous-button"
-              role="button"
               title={this.i18n('navigatePreviousBtn')}
+              aria-label={this.i18n('navigatePreviousBtn')}
               onClick={() => this.previousClick()}
+              disabled={disableNavigationPanel}
             >
               <gux-icon decorative icon-name="arrow-solid-up"></gux-icon>
-            </div>
-            <div
+            </button>
+            <button
+              type="button"
               class="gux-next-button"
-              role="button"
               title={this.i18n('navigateNextBtn')}
+              aria-label={this.i18n('navigateNextBtn')}
               onClick={() => this.nextClick()}
+              disabled={disableNavigationPanel}
             >
               <gux-icon decorative icon-name="arrow-solid-down"></gux-icon>
-            </div>
+            </button>
           </div>
           <button
             type="button"

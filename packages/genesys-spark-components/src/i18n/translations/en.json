@@ -405,7 +405,7 @@
     "breadcrumbs": "Breadcrumbs"
   },
   "gux-content-search": {
-    "eraseBtnAria": "Clear",
+    "eraseBtnAria": "Clear search text",
     "navigateNextBtn": "Next",
     "navigatePreviousBtn": "Previous",
     "totalMatches": "{currentMatch, number} of {matchCount, number}"

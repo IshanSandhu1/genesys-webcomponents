@@ -55,7 +55,8 @@ export class GuxColumnManager {
   @State()
   highlightResults: InternalHighlightResults = {
     matchCount: 0,
-    currentMatch: 0
+    currentMatch: 0,
+    items: []
   };
 
   @State()
@@ -206,7 +207,7 @@ export class GuxColumnManager {
   render(): JSX.Element {
     return (
       <div class="gux-container">
-        <div class="gux-screenreader-search-resuls" aria-live="polite">
+        <div class="gux-sr-only" aria-live="polite">
           {`${this.highlightResults.matchCount} search results`}
         </div>
         <div class="gux-search">
