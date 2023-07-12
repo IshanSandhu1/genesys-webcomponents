@@ -4,8 +4,7 @@ import { fromIsoDate } from '@utils/date/iso-dates';
 import {
   getWeekdays,
   getFirstOfMonth,
-  getDateAsMonthYear,
-  getMonthYearDayDisplay
+  getDateAsMonthYear
 } from '../../services/calendar.service';
 import { getDesiredLocale, getStartOfWeek } from '../../../../../i18n';
 import { buildI18nForComponent, GetI18nValue } from '../../../../../i18n';
@@ -265,7 +264,7 @@ export class GuxCalendar {
           type="button"
           class="gux-right"
           aria-label={this.i18n('nextMonth', {
-            localizedPreviousMonthAndYear: getDateAsMonthYear(
+            localizedNextMonthAndYear: getDateAsMonthYear(
               this.changeMonth(1),
               this.locale
             )
@@ -312,7 +311,10 @@ export class GuxCalendar {
                         >
                           <span aria-hidden="true">{day.date.getDate()}</span>
                           <span class="gux-sr-only">
-                            {getMonthYearDayDisplay(day.date)}
+                            <gux-date-beta
+                              datetime={day.date.toISOString()}
+                              format="long"
+                            ></gux-date-beta>
                           </span>
                         </div>
                       ) as JSX.Element
