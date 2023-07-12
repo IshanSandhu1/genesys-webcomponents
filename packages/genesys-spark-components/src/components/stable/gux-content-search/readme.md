@@ -49,11 +49,14 @@ Type: `Promise<void>`
 ### Depends on
 
 - [gux-icon](../gux-icon)
+- [gux-form-field-input-clear-button](../gux-form-field/helper-components/gux-form-field-input-clear-button)
 
 ### Graph
 ```mermaid
 graph TD;
   gux-content-search --> gux-icon
+  gux-content-search --> gux-form-field-input-clear-button
+  gux-form-field-input-clear-button --> gux-icon
   gux-column-manager-beta --> gux-content-search
   style gux-content-search fill:#f9f,stroke:#333,stroke-width:4px
 ```

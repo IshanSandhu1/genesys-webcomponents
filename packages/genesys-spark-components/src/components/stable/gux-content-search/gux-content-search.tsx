@@ -155,16 +155,9 @@ export class GuxContentSearch {
               <gux-icon decorative icon-name="arrow-solid-down"></gux-icon>
             </button>
           </div>
-          <button
-            type="button"
-            class="gux-clear-button"
-            title={this.i18n('eraseBtnAria')}
-            aria-label={this.i18n('eraseBtnAria')}
+          <gux-form-field-input-clear-button
             onClick={() => void this.clear()}
-            disabled={this.disabled}
-          >
-            <gux-icon decorative icon-name="close"></gux-icon>
-          </button>
+          ></gux-form-field-input-clear-button>
         </div>
       ) as JSX.Element;
     }

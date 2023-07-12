@@ -406,8 +406,8 @@
   },
   "gux-content-search": {
     "eraseBtnAria": "Clear search text",
-    "navigateNextBtn": "Next",
-    "navigatePreviousBtn": "Previous",
+    "navigateNextBtn": "Highlight next match",
+    "navigatePreviousBtn": "Highlight previous match",
     "totalMatches": "{currentMatch, number} of {matchCount, number}"
   },
   "gux-datepicker": {
