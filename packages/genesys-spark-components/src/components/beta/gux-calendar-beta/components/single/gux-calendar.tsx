@@ -191,6 +191,8 @@ export class GuxCalendar {
         this.getFocusedValue()?.getTime() === currentDate.getTime() &&
         this.getFocusedValue()?.getTime() !== selectedValue.getTime(); // Do not show preview value for date if it's already selected
 
+      const today = new Date();
+
       currentWeek.dates.push({
         date: new Date(currentDate),
         disabled,
@@ -199,7 +201,11 @@ export class GuxCalendar {
         selected: selected && selectedValue,
         focused,
         ariaSelected: selected ? 'true' : 'false',
-        ariaDisabled: disabled ? 'true' : 'false'
+        ariaDisabled: disabled ? 'true' : 'false',
+        isCurrentDate:
+          currentDate.getDate() === today.getDate() &&
+          currentDate.getMonth() === today.getMonth() &&
+          currentDate.getFullYear() === today.getFullYear()
       });
       weekDayIndex += 1;
       currentDate.setDate(currentDate.getDate() + 1);
@@ -306,7 +312,8 @@ export class GuxCalendar {
                             'gux-content-date': true,
                             'gux-disabled': day.disabled,
                             'gux-current-month': day.inCurrentMonth,
-                            'gux-selected': day.selected
+                            'gux-selected': day.selected,
+                            'gux-bold': day.isCurrentDate
                           }}
                         >
                           <span aria-hidden="true">{day.date.getDate()}</span>

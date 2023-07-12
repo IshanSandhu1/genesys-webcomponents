@@ -120,6 +120,10 @@
       .gux-sr-only {
         @include gux-sr-only-clip;
       }
+
+      &.gux-bold {
+        font-weight: 700;
+      }
     }
   }
 }
