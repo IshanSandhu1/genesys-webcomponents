@@ -10,7 +10,7 @@ export async function processTokenFile(distFolder, tokenStudioFile) {
   const tokenStudioTokens = getTokenStudioTokens(tokenStudioFile);
   const allSets = tokenStudioTokens.$metadata.tokenSetOrder;
 
-  const sets = allSets.filter(set => !set.endsWith('_deprecated'));
+  const sets = allSets;
 
   for (const setName of sets) {
     const styleDictionaryReadableTokens =
