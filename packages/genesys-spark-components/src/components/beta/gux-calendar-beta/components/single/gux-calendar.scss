@@ -86,7 +86,7 @@
       border: none;
       outline: none;
       color: var(
-        --gse-uiDeprecated-ui-calendar-day-date-background-selected-pff-month
+        --gse-uiDeprecated-ui-calendar-day-date-background-selected-pffMonth
       );
 
       &.gux-current-month {
@@ -121,7 +121,7 @@
       }
 
       &:focus-visible {
-        outline: 2px solid var(--gse-uiDeprecated-ui-shared-focus-ring);
+        outline: 2px solid var(--gse-uiDeprecated-ui-calendar-focus);
       }
 
       .gux-sr-only {
