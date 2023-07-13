@@ -121,7 +121,8 @@
       }
 
       &:focus-visible {
-        outline: 2px solid var(--gse-uiDeprecated-ui-calendar-focus);
+        outline: 1px solid var(--gse-uiDeprecated-ui-shared-foreground-primary);
+        border-radius: 4px;
       }
 
       .gux-sr-only {
