@@ -316,7 +316,9 @@ export class GuxCalendar {
                             'gux-bold': day.isCurrentDate
                           }}
                         >
-                          <span aria-hidden="true">{day.date.getDate()}</span>
+                          <span class="gux-non-sr" aria-hidden="true">
+                            {day.date.getDate()}
+                          </span>
                           <span class="gux-sr-only">
                             <gux-date-beta
                               datetime={day.date.toISOString()}

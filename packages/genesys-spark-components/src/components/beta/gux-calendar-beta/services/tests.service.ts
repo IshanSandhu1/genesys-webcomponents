@@ -5,7 +5,7 @@ export async function validateSelectedDate(
   expectedMonthAndYear: string,
   expectedDay: string
 ) {
-  const selectedDate = await element.find('pierce/.gux-selected');
+  const selectedDate = await element.find('pierce/.gux-selected .gux-non-sr');
   const currentMonthAndYear = await element.find(
     'pierce/.gux-header-month-and-year'
   );
