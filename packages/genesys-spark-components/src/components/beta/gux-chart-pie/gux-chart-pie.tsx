@@ -126,10 +126,33 @@ export class GuxPieChart {
     }
 
     const outerRadius = this.outerRadius;
+    const innerRadius = 2;
 
     this.baseChartSpec.layer = [
       {
-        mark: { type: 'arc', outerRadius }
+        mark: { type: 'arc', outerRadius, innerRadius, padAngle: 0.02 }
+      },
+      {
+        mark: { type: 'arc', outerRadius, innerRadius, padAngle: 0.02 },
+        params: [
+          {
+            name: 'onHover',
+            select: { type: 'point', on: 'mouseover' }
+          }
+        ],
+        encoding: {
+          theta: { field: 'value', type: 'quantitative', stack: true },
+          color: {
+            field: DEFAULT_COLOR_FIELD_NAME,
+            type: 'nominal',
+            scale: { range: VISUALIZATION_COLORS },
+            condition: [{ param: 'onHover', empty: false, value: 'black' }]
+          },
+          fillOpacity: {
+            condition: { param: 'onHover', value: 0.3 },
+            value: 0
+          }
+        }
       }
     ];
 

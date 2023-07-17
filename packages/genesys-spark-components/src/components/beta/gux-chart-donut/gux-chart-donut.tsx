@@ -206,20 +206,61 @@ export class GuxDonutChart {
           }
         },
         {
-          mark: { type: 'arc', outerRadius, innerRadius, padAngle: 0.01 }
+          mark: { type: 'arc', innerRadius, padAngle: 0.02 }
         },
         {
-          mark: { type: 'arc', innerRadius, padAngle: 0.01 }
+          mark: { type: 'arc', innerRadius, padAngle: 0.02 },
+          params: [
+            {
+              name: 'onHover',
+              select: { type: 'point', on: 'mouseover' }
+            }
+          ],
+          encoding: {
+            theta: { field: 'value', type: 'quantitative', stack: true },
+            color: {
+              field: DEFAULT_COLOR_FIELD_NAME,
+              type: 'nominal',
+              scale: { range: VISUALIZATION_COLORS },
+              condition: [{ param: 'onHover', empty: false, value: 'black' }]
+            },
+            fillOpacity: {
+              condition: { param: 'onHover', value: 0.3 },
+              value: 0
+            }
+          }
         }
       ];
       layerFiels = 2;
     } else {
       this.baseChartSpec.layer = [
         {
-          mark: { type: 'arc', outerRadius, innerRadius }
+          mark: { type: 'arc', outerRadius, innerRadius, padAngle: 0.01 }
         },
         {
-          mark: { type: 'arc', innerRadius, stroke: '#fff' }
+          mark: { type: 'arc', innerRadius, padAngle: 0.01, stroke: '#fff' }
+        },
+        {
+          mark: { type: 'arc', innerRadius, padAngle: 0.01, stroke: '#fff' },
+          params: [
+            {
+              name: 'onHover',
+              select: { type: 'point', on: 'mouseover' }
+            }
+          ],
+          encoding: {
+            theta: { field: 'value', type: 'quantitative', stack: true },
+            color: {
+              field: DEFAULT_COLOR_FIELD_NAME,
+              type: 'nominal',
+              scale: { range: VISUALIZATION_COLORS },
+              condition: [{ param: 'onHover', empty: false, value: 'black' }]
+            },
+            fillOpacity: {
+              condition: { param: 'onHover', value: 0.3 },
+              value: 0
+            }
+          }
         }
       ];
     }
