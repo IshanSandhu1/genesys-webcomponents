@@ -8,9 +8,19 @@
 >
 </gux-chart-line-beta>
 
-<h2>Monotone</h2>
+<h2>X-Axis Gridlines</h2>
 <gux-chart-line-beta
   id="chart-2"
+  x-field-name="date"
+  x-axis-gridlines="true"
+  y-field-name="value"
+  x-tick-label-slant="true"
+>
+</gux-chart-line-beta>
+
+<h2>Monotone</h2>
+<gux-chart-line-beta
+  id="chart-3"
   x-field-name="date"
   x-tick-label-slant="true"
   y-field-name="value"
@@ -20,7 +30,7 @@
 
 <h2>Legend</h2>
 <gux-chart-line-beta
-  id="chart-3"
+  id="chart-4"
   x-field-name="date"
   x-tick-label-slant="true"
   y-field-name="value"
@@ -30,7 +40,7 @@
 
 <h2>Custom legend position</h2>
 <gux-chart-line-beta
-  id="chart-8"
+  id="chart-9"
   x-field-name="date"
   x-tick-label-slant="true"
   y-field-name="value"
@@ -41,7 +51,7 @@
 
 <h2>Dashed</h2>
 <gux-chart-line-beta
-  id="chart-4"
+  id="chart-5"
   x-field-name="date"
   x-tick-label-slant="true"
   y-field-name="value"
@@ -52,7 +62,7 @@
 
 <h2>Point Markers</h2>
 <gux-chart-line-beta
-  id="chart-5"
+  id="chart-6"
   x-field-name="date"
   x-tick-label-slant="true"
   y-field-name="value"
@@ -63,7 +73,7 @@
 
 <h2>Custom Titles</h2>
 <gux-chart-line-beta
-  id="chart-6"
+  id="chart-7"
   x-field-name="date"
   x-tick-label-slant="true"
   y-field-name="value"
@@ -76,12 +86,25 @@
 
 <h2>Alternate Color Field</h2>
 <gux-chart-line-beta
-  id="chart-7"
+  id="chart-8"
   x-field-name="date"
   x-tick-label-slant="true"
   y-field-name="time"
   color-field-name="statistic"
   y-axis-title="Time (seconds)"
+>
+</gux-chart-line-beta>
+
+<h2>Point Markers with Shapes</h2>
+<gux-chart-line-beta
+  id="chart-10"
+  x-field-name="date"
+  x-tick-label-slant="true"
+  y-field-name="time"
+  color-field-name="statistic"
+  y-axis-title="Time (seconds)"
+  include-legend="true"
+  include-data-point-shapes="true"
 >
 </gux-chart-line-beta>
 
@@ -95,6 +118,8 @@
     const chart6 = document.querySelector('#chart-6');
     const chart7 = document.querySelector('#chart-7');
     const chart8 = document.querySelector('#chart-8');
+    const chart9 = document.querySelector('#chart-9');
+    const chart10 = document.querySelector('#chart-10');
 
     const chartData = {'values': [
       {'date': '2021-01-01', 'value': 9.4, 'category': 'Jupiter'},
@@ -201,7 +226,7 @@
     ]
   };
 
-  chart1.chartData = {'values': [
+  const chartData2 = {'values': [
       {'date': '2021-01-01', 'value': 9.4, 'category': 'a'},
       {'date': '2021-01-02', 'value': 12.8, 'category': 'a'},
       {'date': '2021-01-03', 'value': 10.6, 'category': 'a'},
@@ -217,14 +242,7 @@
     ]
   };
 
-  chart2.chartData = chartData;
-  chart3.chartData = chartData;
-  chart4.chartData = chartData;
-  chart5.chartData = chartData;
-  chart6.chartData = chartData;
-  chart8.chartData = chartData;
-
-  chart7.chartData = {'values': [
+  const chartdata3 = {'values': [
       {'date': '2021-01-01', 'time': 9.4, 'statistic': 'ASA'},
       {'date': '2021-01-02', 'time': 12.8, 'statistic': 'ASA'},
       {'date': '2021-01-03', 'time': 10.6, 'statistic': 'ASA'},
@@ -251,6 +269,20 @@
       {'date': '2021-01-12', 'time': 16.1, 'statistic': 'ACW'}
     ]
   };
+
+  chart1.chartData = chartData2;
+  chart2.chartData = chartData2;
+  chart3.chartData = chartData;
+  chart4.chartData = chartData;
+  chart5.chartData = chartData;
+  chart6.chartData = chartData;
+  chart7.chartData = chartData;
+  chart8.chartData = chartdata3;
+  chart9.chartData = chartData;
+  chart10.chartData = chartdata3;
+
+
+
 
   })()"
 >

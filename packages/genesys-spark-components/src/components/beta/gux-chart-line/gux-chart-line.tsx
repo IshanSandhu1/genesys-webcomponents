@@ -35,14 +35,20 @@ export class GuxLineChart {
         titlePadding: 8
       },
       axisX: {
-        labelAngle: 0
+        labelPadding: 4,
+        labelAngle: 0,
+        grid: false,
+        labelLimit: 125
+      },
+      axisY: {
+        labelPadding: 8
       },
       legend: {
         symbolType: 'circle'
       }
     },
     encoding: {
-      x: { type: 'nominal' },
+      x: { type: 'nominal', tickCount: 6 },
       y: { type: 'quantitative' },
       color: {
         field: DEFAULT_COLOR_FIELD_NAME,
@@ -51,7 +57,31 @@ export class GuxLineChart {
         legend: null
       },
       tooltip: { aggregate: 'count', type: 'quantitative' }
-    }
+    },
+    layer: [
+      {
+        mark: 'line'
+      },
+      {
+        params: [
+          {
+            name: 'hover',
+            select: { type: 'point', on: 'mouseover', clear: 'mouseout' }
+          }
+        ],
+        mark: { type: 'circle', tooltip: true },
+        encoding: {
+          opacity: {
+            condition: { test: { param: 'hover', empty: false }, value: 1 },
+            value: 0
+          },
+          size: {
+            condition: { test: { param: 'hover', empty: false }, value: 48 },
+            value: 100
+          }
+        }
+      }
+    ]
   };
 
   /**
@@ -86,6 +116,9 @@ export class GuxLineChart {
   @Prop()
   includeDataPointMarkers: boolean;
 
+  @Prop()
+  includeDataPointshapes: boolean;
+
   /**
    * Name for the data field to use to populate the chart's x-axis
    * e.g. xFieldName of "category" will map any "category" fields in chartData to the x-axis
@@ -98,6 +131,12 @@ export class GuxLineChart {
    */
   @Prop()
   xAxisTitle: string;
+
+  /**
+   * Vertical gridlines to display along the x-axis
+   */
+  @Prop()
+  xAxisGridlines: boolean;
 
   /**
    * Name for the data field to use to populate the chart's x-axis
@@ -142,7 +181,7 @@ export class GuxLineChart {
     }
 
     if (this.xTickLabelSlant) {
-      this.baseChartSpec.config.axisX.labelAngle = 45;
+      this.baseChartSpec.config.axisX.labelAngle = -45;
     }
 
     if (this.includeLegend) {
@@ -155,6 +194,7 @@ export class GuxLineChart {
 
     const xFieldName = this.xFieldName;
     const xAxisTitle = this.xAxisTitle;
+    const xAxisGridlines = this.xAxisGridlines;
     const yFieldName = this.yFieldName;
     const yAxisTitle = this.yAxisTitle;
     const legendTitle = this.legendTitle;
@@ -162,6 +202,7 @@ export class GuxLineChart {
     const interpolation = this.interpolation;
     const strokeDash = this.strokeDash;
     const includeDataPointMarkers = this.includeDataPointMarkers;
+    const includeDataPointshapes = this.includeDataPointshapes;
 
     if (xFieldName) {
       this.baseChartSpec.encoding.x.field = xFieldName;
@@ -169,6 +210,10 @@ export class GuxLineChart {
 
     if (xAxisTitle) {
       this.baseChartSpec.encoding.x.title = xAxisTitle;
+    }
+
+    if (xAxisGridlines) {
+      this.baseChartSpec.config.axisX.grid = xAxisGridlines;
     }
 
     if (yFieldName) {
@@ -196,6 +241,14 @@ export class GuxLineChart {
 
     if (interpolation) {
       this.baseChartSpec.mark.interpolate = interpolation;
+    }
+
+    if (includeDataPointshapes) {
+      this.baseChartSpec.mark.point = true;
+      this.baseChartSpec.encoding.shape = {
+        field: colorFieldName,
+        type: 'nominal'
+      };
     }
 
     if (includeDataPointMarkers) {
