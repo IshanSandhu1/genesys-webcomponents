@@ -55,8 +55,7 @@ export class GuxLineChart {
         type: 'nominal',
         scale: { range: VISUALIZATION_COLORS },
         legend: null
-      },
-      tooltip: { aggregate: 'count', type: 'quantitative' }
+      }
     },
     layer: [
       {
@@ -76,7 +75,7 @@ export class GuxLineChart {
             value: 0
           },
           size: {
-            condition: { test: { param: 'hover', empty: false }, value: 48 },
+            condition: { test: { param: 'hover', empty: false }, value: 40 },
             value: 100
           }
         }
@@ -117,7 +116,7 @@ export class GuxLineChart {
   includeDataPointMarkers: boolean;
 
   @Prop()
-  includeDataPointshapes: boolean;
+  includeDataPointShapes: boolean;
 
   /**
    * Name for the data field to use to populate the chart's x-axis
@@ -202,7 +201,7 @@ export class GuxLineChart {
     const interpolation = this.interpolation;
     const strokeDash = this.strokeDash;
     const includeDataPointMarkers = this.includeDataPointMarkers;
-    const includeDataPointshapes = this.includeDataPointshapes;
+    const includeDataPointShapes = this.includeDataPointShapes;
 
     if (xFieldName) {
       this.baseChartSpec.encoding.x.field = xFieldName;
@@ -243,8 +242,7 @@ export class GuxLineChart {
       this.baseChartSpec.mark.interpolate = interpolation;
     }
 
-    if (includeDataPointshapes) {
-      this.baseChartSpec.mark.point = true;
+    if (includeDataPointShapes) {
       this.baseChartSpec.encoding.shape = {
         field: colorFieldName,
         type: 'nominal'
@@ -253,6 +251,8 @@ export class GuxLineChart {
 
     if (includeDataPointMarkers) {
       this.baseChartSpec.mark.point = includeDataPointMarkers;
+      this.baseChartSpec.layer[1].encoding.opacity.value = 100;
+      this.baseChartSpec.layer[1].encoding.size.value = 40;
     }
 
     const spec = Object.assign(this.baseChartSpec, chartData);
