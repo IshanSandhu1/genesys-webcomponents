@@ -48,7 +48,7 @@ export class GuxLineChart {
       }
     },
     encoding: {
-      x: { type: 'nominal', tickCount: 6 },
+      x: { type: 'nominal' },
       y: { type: 'quantitative' },
       color: {
         field: DEFAULT_COLOR_FIELD_NAME,
@@ -59,7 +59,10 @@ export class GuxLineChart {
     },
     layer: [
       {
-        mark: 'line'
+        mark: {
+          type: 'line',
+          interpolate: 'linear'
+        }
       },
       {
         params: [
@@ -239,7 +242,7 @@ export class GuxLineChart {
     }
 
     if (interpolation) {
-      this.baseChartSpec.mark.interpolate = interpolation;
+      this.baseChartSpec.layer[0].mark.interpolate = interpolation;
     }
 
     if (includeDataPointShapes) {
