@@ -26,6 +26,6 @@ describe('gux-chart-line-beta', () => {
     page = await newSpecPage({ components, html, language });
 
     expect(page.rootInstance.xTickLabelSlant).toBeTruthy();
-    expect(page.rootInstance.baseChartSpec.config.axisX.labelAngle).toBe(45);
+    expect(page.rootInstance.baseChartSpec.config.axisX.labelAngle).toBe(-45);
   });
 });
